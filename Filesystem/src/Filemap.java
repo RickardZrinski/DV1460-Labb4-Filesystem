@@ -25,7 +25,7 @@ public class Filemap
 
     void printall()
     {
-        String dirname = "pol/rickard/martin";
+        String dirname = "pol/rickard";
        if(checkDirExists(dirname) == true)
        {
            System.out.println("Den finns");
@@ -45,7 +45,7 @@ public class Filemap
         String [] check = dir.split("/");
         if(check.length > 1)
         {
-            System.out.println(check[check.length-2]);
+            System.out.println(check[0]);
             if(k.containsKey(check[check.length-2]))
             {
                 exists = true;
