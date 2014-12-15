@@ -9,8 +9,24 @@ public class Filesystem
 
   public String format()
   {
+
+      byte[] format =new byte[512];
+      for (int f = 0; f<512; f++)
+      {
+        format[f] = -1;
+      }
+
+      for(int i = 0; i<250; i++)
+      {
+         int formatResponse = m_BlockDevice.writeBlock(i,format);
+         if(formatResponse == -1)
+         {
+           return new String("Diskformat failed");
+         }
+
+      }
       return new String("Diskformat sucessfull");
-    }
+  }
 
   public String ls(String[] p_asPath)
     {
