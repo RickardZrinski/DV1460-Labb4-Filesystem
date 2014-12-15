@@ -44,34 +44,34 @@ public class Filesystem
       return new String("Diskformat sucessfull");
   }
 
-  public String ls(String[] p_asPath)
+  public String ls(String p_asPath)
     {
       System.out.print("Listing directory ");
-      dumpArray(p_asPath);
+   //   dumpArray(p_asPath);
       System.out.print("");
       String fetch = "";
-      for(int i=0; i< p_asPath.length; i++)
-      {
-        fetch += p_asPath[i];
-      }
-      Entry test = new Entry(fetch+"/",true);
+//      for(int i=0; i< p_asPath.length; i++)
+//      {
+//        fetch += p_asPath[i];
+//      }
+      Entry test = new Entry(p_asPath+"/",true);
    //   System.out.println(fileSystemStructure.g(test).getName());
       return new String("");
     }
 
 
-  public String create(String[] p_asPath,byte[] p_abContents)
+  public String create(String p_asPath,byte[] p_abContents)
     {
       System.out.print("Creating file ");
-      dumpArray(p_asPath);
+  //    dumpArray(p_asPath);
       System.out.print("");
       return new String("");
     }
 
-  public String cat(String[] p_asPath)
+  public String cat(String p_asPath)
     {
       System.out.print("Dumping contents of file ");
-      dumpArray(p_asPath);
+   //   dumpArray(p_asPath);
       System.out.print("");
       return new String("");
     }
@@ -89,56 +89,56 @@ public class Filesystem
       return new String("");
     }
 
-  public String rm(String[] p_asPath)
+  public String rm(String p_asPath)
     {
       System.out.print("Removing file ");
-      dumpArray(p_asPath);
+    //  dumpArray(p_asPath);
       System.out.print("");
       return new String("");
     }
 
-  public String copy(String[] p_asSource,String[] p_asDestination)
+  public String copy(String p_asSource,String p_asDestination)
     {
       System.out.print("Copying file from ");
-      dumpArray(p_asSource);
+    //  dumpArray(p_asSource);
       System.out.print(" to ");
-      dumpArray(p_asDestination);
+    //  dumpArray(p_asDestination);
       System.out.print("");
       return new String("");
     }
 
-  public String append(String[] p_asSource,String[] p_asDestination)
+  public String append(String p_asSource,String p_asDestination)
     {
       System.out.print("Appending file ");
-      dumpArray(p_asSource);
+  //    dumpArray(p_asSource);
       System.out.print(" to ");
-      dumpArray(p_asDestination);
+    //  dumpArray(p_asDestination);
       System.out.print("");
       return new String("");
     }
 
-  public String rename(String[] p_asSource,String[] p_asDestination)
+  public String rename(String p_asSource,String p_asDestination)
     {
       System.out.print("Renaming file ");
-      dumpArray(p_asSource);
+    //  dumpArray(p_asSource);
       System.out.print(" to ");
-      dumpArray(p_asDestination);
+   //   dumpArray(p_asDestination);
       System.out.print("");
       return new String("");
     }
 
-  public String mkdir(String[] p_asPath)
+  public String mkdir(String p_asPath)
     {
       System.out.print("Creating directory ");
-      dumpArray(p_asPath);
-      String fetch = "";
-      for(int i=0; i< p_asPath.length; i++)
-      {
-        fetch += p_asPath[i];
-      }
-      System.out.println(fetch);
+    //  dumpArray(p_asPath);
+
+//      for(int i=0; i< p_asPath.length; i++)
+//      {
+//        fetch += p_asPath[i];
+//      }
+      System.out.println(p_asPath);
       boolean setDirectory = true;
-      Entry newEntry = new Entry(fetch,setDirectory);
+      Entry newEntry = new Entry(p_asPath,setDirectory);
 
 
       String newfolder = currentDirectory+newEntry.getName()+"/";
@@ -152,23 +152,23 @@ public class Filesystem
       //return new String("");
     }
 
-  public String cd(String[] p_asPath)
+  public String cd(String p_asPath)
     {
       System.out.print("Changing directory to ");
-      dumpArray(p_asPath);
+     // dumpArray(p_asPath);
       System.out.print("");
 
       String fetch = "";
-      for(int i=0; i< p_asPath.length; i++)
-      {
-        fetch += p_asPath[i];
-      }
-      boolean check = fileSystemStructure.checkDirExists(fetch);
+//      for(int i=0; i< p_asPath.length; i++)
+//      {
+//        fetch += p_asPath[i];
+//      }
+      boolean check = fileSystemStructure.checkDirExists(p_asPath);
 
 
       if(check)
       {
-        currentDirectory = currentDirectory+fetch;
+        currentDirectory = currentDirectory+p_asPath;
         return "successful!";
       }
 
@@ -185,12 +185,12 @@ public class Filesystem
       return currentDirectory;
     }
 
-  private void dumpArray(String[] p_asArray)
-    {
-      for(int nIndex=0;nIndex<p_asArray.length;nIndex++)
-        {
-          System.out.print(p_asArray[nIndex]+"=>");
-        }
-    }
+//  private void dumpArray(String p_asArray)
+//    {
+//      for(int nIndex=0;nIndex<p_asArray.length;nIndex++)
+//        {
+//          System.out.print(p_asArray[nIndex]+"=>");
+//        }
+//    }
 
 }
