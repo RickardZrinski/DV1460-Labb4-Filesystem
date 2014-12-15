@@ -23,22 +23,6 @@ public class Filemap
 
     }
 
-    void printall()
-    {
-        String dirname = "pol/rickard/martin";
-        if(checkDirExists(dirname) == true)
-        {
-            System.out.println("Den finns");
-        }
-        else
-        {
-            System.out.println("finns ej");
-        }
-        //Entry l =(Entry) k.get("pol/rickard/martin");
-        //System.out.println(l.getName());
-
-    }
-
     public boolean checkDirExists(String path)
     {
         boolean exists = false;
