@@ -158,6 +158,7 @@ public class Filesystem
 //      {
 //        fetch += p_asPath[i];
 //      }
+     // @TODO must make checkDirExists() public so this method can work properly
       //boolean check = fileSystemStructure.checkDirExists(p_asPath);
 
 
