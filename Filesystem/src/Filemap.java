@@ -11,16 +11,9 @@ public class Filemap
         k = new TreeMap<String,Entry>();
     }
 
-    void addEntrys()
+    void addEntry(String path,Entry entry)
     {
-        Entry k1 = new Entry("pol_dir",true);
-        Entry k2 = new Entry("Rickard_dir",true);
-        Entry k3 = new Entry("martin_dir",true);
-
-        k.put("pol",k1);
-        k.put("pol/rickard",k2);
-        k.put("pol/rickard/martin",k3);
-
+        k.put(path,entry);
     }
 
     public boolean checkDirExists(String path)
