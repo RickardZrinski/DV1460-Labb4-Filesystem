@@ -1,10 +1,26 @@
+import java.util.TreeMap;
+
 public class Filesystem
 {
   private BlockDevice m_BlockDevice;
-
+  private EntryTree fileSystemStructure;
+  private String currentDirectory;
   public Filesystem(BlockDevice p_BlockDevice)
     {
       m_BlockDevice=p_BlockDevice;
+      currentDirectory = "";
+      fileSystemStructure = new EntryTree();
+
+      boolean directory = true;
+      Entry test = new Entry("/",true);
+      fileSystemStructure.addEntry("/",test);
+      boolean check =  fileSystemStructure.checkDirExists("/");
+      if (check)
+      {
+        fileSystemStructure.addEntry("/", new Entry("/", directory));
+        currentDirectory = "/";
+      }
+
     }
 
   public String format()
@@ -33,6 +49,13 @@ public class Filesystem
       System.out.print("Listing directory ");
       dumpArray(p_asPath);
       System.out.print("");
+      String fetch = "";
+      for(int i=0; i< p_asPath.length; i++)
+      {
+        fetch += p_asPath[i];
+      }
+      Entry test = new Entry(fetch+"/",true);
+   //   System.out.println(fileSystemStructure.g(test).getName());
       return new String("");
     }
 
@@ -108,8 +131,25 @@ public class Filesystem
     {
       System.out.print("Creating directory ");
       dumpArray(p_asPath);
-      System.out.print("");
-      return new String("");
+      String fetch = "";
+      for(int i=0; i< p_asPath.length; i++)
+      {
+        fetch += p_asPath[i];
+      }
+      System.out.println(fetch);
+      boolean setDirectory = true;
+      Entry newEntry = new Entry(fetch,setDirectory);
+
+
+      String newfolder = currentDirectory+newEntry.getName()+"/";
+      fileSystemStructure.addEntry(newfolder, newEntry);
+
+      boolean check = fileSystemStructure.checkDirExists(currentDirectory);
+      if (check)
+        return "";
+      else
+      return "negative";
+      //return new String("");
     }
 
   public String cd(String[] p_asPath)
@@ -117,12 +157,32 @@ public class Filesystem
       System.out.print("Changing directory to ");
       dumpArray(p_asPath);
       System.out.print("");
-      return new String("");
+
+      String fetch = "";
+      for(int i=0; i< p_asPath.length; i++)
+      {
+        fetch += p_asPath[i];
+      }
+      boolean check = fileSystemStructure.checkDirExists(fetch);
+
+
+      if(check)
+      {
+        currentDirectory = currentDirectory+fetch;
+        return "successful!";
+      }
+
+      else
+      {
+        return "failed";
+      }
+
+     // return new String("");
     }
 
   public String pwd()
     {
-      return new String("/unknown/");
+      return currentDirectory;
     }
 
   private void dumpArray(String[] p_asArray)
