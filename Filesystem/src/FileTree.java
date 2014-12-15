@@ -4,9 +4,9 @@ import java.util.TreeMap;
 /**
  * Created by POL-PC on 2014-12-15.
  */
-public class Filemap
+public class FileTree
 {
-    Filemap()
+    FileTree()
     {
         k = new TreeMap<String,Entry>();
     }

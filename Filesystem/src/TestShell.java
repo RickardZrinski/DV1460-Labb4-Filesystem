@@ -7,7 +7,7 @@ public class TestShell
       //Shell Bash=new Shell(FS,null);
       //Bash.start();
 
-      Filemap k = new Filemap();
+      FileTree k = new FileTree();
 
       k.addEntrys();
       k.printall();
