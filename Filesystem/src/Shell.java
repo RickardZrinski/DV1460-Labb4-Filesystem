@@ -65,7 +65,7 @@ public class Shell
                 case 2: // ls
                   if(asCommandArray.length==1)
                     {
-                      System.out.println(m_Filesystem.ls(split(".",'/')));
+                      System.out.println(m_Filesystem.ls("."));
                     }
                   else
                     {
@@ -75,7 +75,7 @@ public class Shell
                         }
                       else
                         {
-                          System.out.println(m_Filesystem.ls(split(asCommandArray[1],'/')));
+                          System.out.println(m_Filesystem.ls(asCommandArray[1]));
                         }
                     }
                   break;
@@ -87,7 +87,7 @@ public class Shell
                   else
                     {
                       System.out.println("Enter data. Empty line to end.");
-                      System.out.println(m_Filesystem.create(split(asCommandArray[1],'/'),readBlock()));
+                      System.out.println(m_Filesystem.create(asCommandArray[1],readBlock()));
                     }
                   break;
 
@@ -98,7 +98,7 @@ public class Shell
                     }
                   else
                     {
-                      System.out.println(m_Filesystem.cat(split(asCommandArray[1],'/')));
+                      System.out.println(m_Filesystem.cat(asCommandArray[1]));
                     }
                   break;
                 case 5: // save
@@ -129,7 +129,7 @@ public class Shell
                     }
                   else
                     {
-                      System.out.println(m_Filesystem.rm(split(asCommandArray[1],'/')));
+                      System.out.println(m_Filesystem.rm(asCommandArray[1]));
                     }
                   break;
 
@@ -140,7 +140,7 @@ public class Shell
                     }
                   else
                     {
-                      System.out.println(m_Filesystem.copy(split(asCommandArray[1],'/'),split(asCommandArray[2],'/')));
+                      System.out.println(m_Filesystem.copy(asCommandArray[1],asCommandArray[2]));
                     }
                   break;
                   
@@ -151,7 +151,7 @@ public class Shell
                     }
                   else
                     {
-                      System.out.println(m_Filesystem.append(split(asCommandArray[1],'/'),split(asCommandArray[2],'/')));
+                      System.out.println(m_Filesystem.append(asCommandArray[1],asCommandArray[2]));
                     }
                   break;
 
@@ -162,7 +162,7 @@ public class Shell
                     }
                   else
                     {
-                      System.out.println(m_Filesystem.rename(split(asCommandArray[1],'/'),split(asCommandArray[2],'/')));             
+                      System.out.println(m_Filesystem.rename(asCommandArray[1],asCommandArray[2]));             
                     }
                   break;
 
@@ -173,7 +173,7 @@ public class Shell
                     }
                   else
                     {
-                      System.out.println(m_Filesystem.mkdir(split(asCommandArray[1],'/')));
+                      System.out.println(m_Filesystem.mkdir(asCommandArray[1]));
                     }
                   break;
 
@@ -184,7 +184,7 @@ public class Shell
                     }
                   else
                     {
-                      System.out.println(m_Filesystem.cd(split(asCommandArray[1],'/')));
+                      System.out.println(m_Filesystem.cd(asCommandArray[1]));
                     }
                   break;
 
@@ -236,16 +236,16 @@ public class Shell
 // "ls a bb" acted as "ls bb"
   	private String[] split(String p_sString,char p_cDel) 
   	{
-  		//skapar en tokenizer med strängen p_sString
+  		//skapar en tokenizer med strï¿½ngen p_sString
   		//och avskiljaren p_cDel
   		java.util.StringTokenizer st = new java.util.StringTokenizer(p_sString,
   																						 p_cDel + "");
 		
-  		int nrOfTokens = st.countTokens();//räkanar antal avskilljare(Tokens)
+  		int nrOfTokens = st.countTokens();//rï¿½kanar antal avskilljare(Tokens)
   		String[] asStrings = new String[nrOfTokens];
 		
   		int nr = 0;
-  		while(st.hasMoreTokens()) {//sålänge som det finns fler avskiljare
+  		while(st.hasMoreTokens()) {//sï¿½lï¿½nge som det finns fler avskiljare
   			asStrings[nr] = st.nextToken();
   			nr++;
   		}
