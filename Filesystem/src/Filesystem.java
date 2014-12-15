@@ -13,8 +13,8 @@ public class Filesystem
 
       boolean directory = true;
       Entry test = new Entry("/",true);
-      fileSystemStructure.addEntry("/",test);
-      boolean check =  fileSystemStructure.checkDirExists("/");
+
+      boolean check =  fileSystemStructure.addEntry("/",test);
       if (check)
       {
         fileSystemStructure.addEntry("/", new Entry("/", directory));
@@ -130,25 +130,20 @@ public class Filesystem
   public String mkdir(String p_asPath)
     {
       System.out.print("Creating directory ");
-    //  dumpArray(p_asPath);
-
-//      for(int i=0; i< p_asPath.length; i++)
-//      {
-//        fetch += p_asPath[i];
-//      }
       System.out.println(p_asPath);
-      boolean setDirectory = true;
-      Entry newEntry = new Entry(p_asPath,setDirectory);
 
 
-      String newfolder = currentDirectory+newEntry.getName()+"/";
-      fileSystemStructure.addEntry(newfolder, newEntry);
-
-      boolean check = fileSystemStructure.checkDirExists(currentDirectory);
-      if (check)
+      Entry newEntry = new Entry(p_asPath,true);
+      p_asPath = currentDirectory+newEntry.getName()+"/";
+      boolean check = fileSystemStructure.addEntry(p_asPath, newEntry);
+      if(check)
+      {
         return "";
+      }
       else
-      return "negative";
+      {
+        return "error! directory already exists!";
+      }
       //return new String("");
     }
 
@@ -163,21 +158,21 @@ public class Filesystem
 //      {
 //        fetch += p_asPath[i];
 //      }
-      boolean check = fileSystemStructure.checkDirExists(p_asPath);
+      //boolean check = fileSystemStructure.checkDirExists(p_asPath);
 
 
-      if(check)
-      {
-        currentDirectory = currentDirectory+p_asPath;
-        return "successful!";
-      }
+//      if(check)
+//      {
+//        currentDirectory = currentDirectory+p_asPath;
+//        return "successful!";
+//      }
+//
+//      else
+//      {
+//        return "failed";
+//      }
 
-      else
-      {
-        return "failed";
-      }
-
-     // return new String("");
+      return new String("");
     }
 
   public String pwd()
