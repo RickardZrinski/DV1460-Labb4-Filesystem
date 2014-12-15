@@ -8,7 +8,7 @@ public class Filesystem
     }
 
   public String format()
-    {
+  {
       return new String("Diskformat sucessfull");
     }
 
@@ -40,6 +40,7 @@ public class Filesystem
   public String save(String p_sPath)
     {
       System.out.print("Saving blockdevice to file "+p_sPath);
+
       return new String("");
     }
 
