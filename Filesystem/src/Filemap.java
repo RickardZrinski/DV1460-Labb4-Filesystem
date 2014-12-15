@@ -8,7 +8,7 @@ public class Filemap
 {
     Filemap()
     {
-         k = new TreeMap<String,Entry>();
+        k = new TreeMap<String,Entry>();
     }
 
     void addEntrys()
@@ -25,15 +25,15 @@ public class Filemap
 
     void printall()
     {
-        String dirname = "pol/rickard";
-       if(checkDirExists(dirname) == true)
-       {
-           System.out.println("Den finns");
-       }
-       else
-       {
-           System.out.println("finns ej");
-       }
+        String dirname = "pol/rickard/martin";
+        if(checkDirExists(dirname) == true)
+        {
+            System.out.println("Den finns");
+        }
+        else
+        {
+            System.out.println("finns ej");
+        }
         //Entry l =(Entry) k.get("pol/rickard/martin");
         //System.out.println(l.getName());
 
@@ -53,15 +53,7 @@ public class Filemap
 
         if(k.containsKey(dirPath))
         {
-<<<<<<< HEAD
-            System.out.println(check[0]);
-            if(k.containsKey(check[check.length-2]))
-            {
-                exists = true;
-            }
-=======
             exists = true;
->>>>>>> bbc8e225fbe68e7308a4b34811b1a3b2fd002499
         }
 
         System.out.println("dirPath: " + dirPath);
