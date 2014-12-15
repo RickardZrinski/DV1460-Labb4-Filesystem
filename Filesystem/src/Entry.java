@@ -1,6 +1,3 @@
-/**
- * Created by Rickard on 2014-12-15.
- */
 public class Entry
 {
     boolean isDirectory;

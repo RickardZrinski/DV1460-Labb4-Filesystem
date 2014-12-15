@@ -39,18 +39,25 @@ public class Filemap
 
     }
 
-    public boolean checkDirExists(String dir)
+    public boolean checkDirExists(String path)
     {
         boolean exists = false;
-        String [] check = dir.split("/");
-        if(check.length > 1)
+
+        String dirPath;
+        String entryName;
+
+        int index = path.lastIndexOf("/");
+
+        dirPath = path.substring(0, index);
+        entryName = path.substring(index+1, path.length());
+
+        if(k.containsKey(dirPath))
         {
-            System.out.println(check[check.length-2]);
-            if(k.containsKey(check[check.length-2]))
-            {
-                exists = true;
-            }
+            exists = true;
         }
+
+        System.out.println("dirPath: " + dirPath);
+        System.out.println("entryName: " + entryName);
 
         return exists;
     }
