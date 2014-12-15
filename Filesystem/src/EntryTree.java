@@ -4,16 +4,27 @@ import java.util.TreeMap;
 /**
  * Created by POL-PC on 2014-12-15.
  */
-public class FileTree
+public class EntryTree
 {
-    FileTree()
+    EntryTree()
     {
         k = new TreeMap<String,Entry>();
     }
 
-    void addEntry(String path,Entry entry)
+    public boolean addEntry(String path,Entry entry)
     {
-        k.put(path,entry);
+        boolean added;
+
+        if(checkDirExists(path))
+        {
+            k.put(path,entry);
+            added = true;
+        } else
+        {
+            added = false;
+        }
+
+        return added;
     }
 
     public boolean checkDirExists(String path)
