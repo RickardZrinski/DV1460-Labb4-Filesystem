@@ -27,7 +27,7 @@ public class EntryTree
         return added;
     }
 
-    public boolean checkDirExists(String path)
+    private boolean checkDirExists(String path)
     {
         boolean exists = false;
 
