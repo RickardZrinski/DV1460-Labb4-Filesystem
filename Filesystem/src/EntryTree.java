@@ -37,14 +37,11 @@ public class EntryTree
         }
 
         boolean exists = false;
-
         String dirPath;
-        String entryName;
 
         int index = path.lastIndexOf("/");
 
         dirPath = path.substring(0, index);
-        entryName = path.substring(index + 1, path.length());
 
         if(k.containsKey(dirPath))
         {
