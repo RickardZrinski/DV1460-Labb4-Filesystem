@@ -28,7 +28,7 @@ public class EntryTree
         return added;
     }
 
-    private boolean checkDirExists(String path)
+    public boolean checkDirExists(String path)
     {
         // Always return that root exists
         if(path.charAt(0) == '/')
@@ -57,12 +57,31 @@ public class EntryTree
     //@TODO must find a way to print all children for a given parent
     public void printChildren(String currentDirectory)
     {
-        System.out.println(k.size());
         Set<String> keys = k.keySet();
-        for(String key : keys)
+
+        int origAmount = calcNrOfSlashes(currentDirectory);
+
+        for(String theKey : keys)
         {
-            System.out.println("values of"+key+" is: "+k.get(key).toString());
+            if (calcNrOfSlashes(theKey) == origAmount)
+            {
+                System.out.println("folders and files within this directory is: " + theKey);
+            }
+
         }
+    }
+
+    private int calcNrOfSlashes(String theKey)
+    {
+        int counter = 0;
+        for(int i=0; i< theKey.length(); i++)
+        {
+            if(theKey.contentEquals("/"))
+            {
+                counter++;
+            }
+        }
+        return counter;
     }
 
     private TreeMap k;
