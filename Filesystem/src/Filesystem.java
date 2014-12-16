@@ -15,7 +15,7 @@ public class Filesystem
       Entry test = new Entry("/",true);
 
       boolean check =  fileSystemStructure.addEntry("/",test);
-      if (!check)
+      if (check)
       {
         fileSystemStructure.addEntry("/", new Entry("/", directory));
         currentDirectory = "/";
@@ -47,15 +47,26 @@ public class Filesystem
   public String ls(String p_asPath)
     {
       System.out.print("Listing directory ");
-   //   dumpArray(p_asPath);
       System.out.print("");
-      String fetch = "";
-//      for(int i=0; i< p_asPath.length; i++)
-//      {
-//        fetch += p_asPath[i];
-//      }
-      Entry test = new Entry(p_asPath+"/",true);
-   //   System.out.println(fileSystemStructure.g(test).getName());
+
+      if(p_asPath.contentEquals(currentDirectory) | p_asPath.contentEquals("."))
+      {
+        fileSystemStructure.printChildren(currentDirectory);
+      }
+      else
+      {
+//        String[] splitUp = p_asPath.split("");
+//        for(int i=0; i< splitUp.length; i++)
+//        {
+//          if(!splitUp[i].contentEquals(""))
+//          {
+//            fileSystemStructure.printChildren(splitUp[i]);
+//          }
+//
+//        }
+
+      }
+
       return new String("");
     }
 
@@ -132,11 +143,11 @@ public class Filesystem
       System.out.print("Creating directory ");
       System.out.println(p_asPath);
 
-
+      p_asPath = currentDirectory+p_asPath+"/";
+      System.out.println(p_asPath);
       Entry newEntry = new Entry(p_asPath,true);
-      p_asPath = currentDirectory+newEntry.getName()+"/";
       boolean check = fileSystemStructure.addEntry(p_asPath, newEntry);
-      if(!check)
+      if(check)
       {
         return "";
       }
@@ -144,34 +155,19 @@ public class Filesystem
       {
         return "error! directory already exists!";
       }
-      //return new String("");
     }
 
   public String cd(String p_asPath)
     {
       System.out.print("Changing directory to ");
-     // dumpArray(p_asPath);
       System.out.print("");
 
-      String fetch = "";
-//      for(int i=0; i< p_asPath.length; i++)
-//      {
-//        fetch += p_asPath[i];
-//      }
-     // @TODO must make checkDirExists() public so this method can work properly
-      //boolean check = fileSystemStructure.checkDirExists(p_asPath);
-
-
-//      if(check)
-//      {
-//        currentDirectory = currentDirectory+p_asPath;
-//        return "successful!";
-//      }
-//
-//      else
-//      {
-//        return "failed";
-//      }
+      p_asPath += "/";
+      boolean check = fileSystemStructure.checkDirExists(p_asPath);
+      if(check)
+      {
+        currentDirectory = p_asPath+"/";
+      }
 
       return new String("");
     }
