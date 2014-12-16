@@ -1,4 +1,5 @@
 import java.util.AbstractMap;
+import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -15,7 +16,7 @@ public class EntryTree
     {
         boolean added;
 
-        if(checkDirExists(path))
+        if(!checkDirExists(path))
         {
             k.put(path,entry);
             added = true;
@@ -48,6 +49,16 @@ public class EntryTree
         System.out.println("entryName: " + entryName);
 
         return exists;
+    }
+
+    public void printChildren(String currentDirectory)
+    {
+        System.out.println(k.size());
+        Set<String> keys = k.keySet();
+        for(String key : keys)
+        {
+            System.out.println("values of"+key+" is: "+k.get(key));
+        }
     }
 
     private TreeMap k;
