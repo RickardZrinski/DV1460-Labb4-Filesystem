@@ -15,7 +15,7 @@ public class Filesystem
       Entry test = new Entry("/",true);
 
       boolean check =  fileSystemStructure.addEntry("/",test);
-      if (check)
+      if (!check)
       {
         fileSystemStructure.addEntry("/", new Entry("/", directory));
         currentDirectory = "/";
