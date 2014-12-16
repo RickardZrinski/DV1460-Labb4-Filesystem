@@ -1,3 +1,5 @@
+import java.util.Calendar;
+
 public class Entry
 {
     boolean isDirectory;
@@ -10,6 +12,8 @@ public class Entry
     {
         this.name = name;
         this.isDirectory = isDirectory;
+        Calendar cal = Calendar.getInstance();
+        creationDate = cal.getTime().toString();
     }
 
     public boolean isDirectory()
