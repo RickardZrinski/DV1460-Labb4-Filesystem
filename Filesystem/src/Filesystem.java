@@ -3,23 +3,11 @@ import java.io.*;
 public class Filesystem
 {
   private BlockDevice m_BlockDevice;
-  private EntryTree fileSystemStructure;
   private String currentDirectory;
   public Filesystem(BlockDevice p_BlockDevice)
     {
       m_BlockDevice=p_BlockDevice;
       currentDirectory = "";
-      fileSystemStructure = new EntryTree();
-
-      boolean directory = true;
-      Entry test = new Entry("/",true);
-
-      boolean check =  fileSystemStructure.addEntry("/",test);
-      if (check)
-      {
-        fileSystemStructure.addEntry("/", new Entry("/", directory));
-        currentDirectory = "/";
-      }
 
     }
 
@@ -49,23 +37,7 @@ public class Filesystem
       System.out.print("Listing directory ");
       System.out.print("");
 
-      if(p_asPath.contentEquals(currentDirectory) | p_asPath.contentEquals("."))
-      {
-        fileSystemStructure.printChildren(currentDirectory);
-      }
-      else
-      {
-//        String[] splitUp = p_asPath.split("");
-//        for(int i=0; i< splitUp.length; i++)
-//        {
-//          if(!splitUp[i].contentEquals(""))
-//          {
-//            fileSystemStructure.printChildren(splitUp[i]);
-//          }
-//
-//        }
 
-      }
 
       return new String("");
     }
@@ -184,20 +156,7 @@ public class Filesystem
     {
       System.out.print("Creating directory ");
       System.out.println(p_asPath);
-
-    //  p_asPath = currentDirectory+p_asPath+"/";
-      p_asPath = currentDirectory+p_asPath+"/";
-      System.out.println(p_asPath);
-      Entry newEntry = new Entry(p_asPath,true);
-      boolean check = fileSystemStructure.addEntry(p_asPath, newEntry);
-      if(check)
-      {
-        return "";
-      }
-      else
-      {
-        return "error! directory already exists!";
-      }
+      return "";
     }
 
   public String cd(String p_asPath)
@@ -206,12 +165,6 @@ public class Filesystem
       System.out.print("");
       System.out.println(p_asPath);
 
-      p_asPath = p_asPath+"/";
-      boolean check = fileSystemStructure.checkDirExists(p_asPath);
-      if(!check)
-      {
-        currentDirectory = p_asPath;
-      }
       return new String("");
     }
 
