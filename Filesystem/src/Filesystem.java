@@ -113,11 +113,10 @@ public class Filesystem
     return new String("");
   }
 
-  byte[][] disk;
   public String read(String p_sPath)
   {
     System.out.print("Reading file "+p_sPath+" to blockdevice");
-
+    byte[][] disk = null;
     ObjectInputStream in = null;
     try
     {
