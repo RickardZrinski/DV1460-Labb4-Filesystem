@@ -1,4 +1,4 @@
-import java.util.TreeMap;
+import java.io.*;
 
 public class Filesystem
 {
@@ -88,17 +88,59 @@ public class Filesystem
     }
 
   public String save(String p_sPath)
-    {
-      System.out.print("Saving blockdevice to file "+p_sPath);
+  {
+    System.out.print("Saving blockdevice to file "+p_sPath);
 
-      return new String("");
+    byte[][] savedDisk =new byte[250][512];
+
+    for(int i = 0; i<250; i++)
+    {
+      savedDisk[i] = m_BlockDevice.readBlock(i);
     }
+
+    try
+    {
+      ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(p_sPath));
+      out.writeObject(savedDisk);
+      out.flush();
+      out.close();
+    }
+    catch(IOException e)
+    {
+      e.getStackTrace();
+    }
+
+    return new String("");
+  }
 
   public String read(String p_sPath)
+  {
+    System.out.print("Reading file "+p_sPath+" to blockdevice");
+    byte[][] disk = null;
+    ObjectInputStream in = null;
+    try
     {
-      System.out.print("Reading file "+p_sPath+" to blockdevice");
-      return new String("");
+      in = new ObjectInputStream(new FileInputStream(p_sPath));
+      disk = (byte[][]) in.readObject();
+      in.close();
     }
+
+    catch (IOException e)
+    {
+      e.printStackTrace();
+    }
+    catch (ClassNotFoundException e)
+    {
+      e.printStackTrace();
+    }
+
+    for(int i = 0; i<250; i++)
+    {
+      m_BlockDevice.writeBlock(i,disk[i]);
+    }
+
+    return new String("");
+  }
 
   public String rm(String p_asPath)
     {
