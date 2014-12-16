@@ -185,6 +185,7 @@ public class Filesystem
       System.out.print("Creating directory ");
       System.out.println(p_asPath);
 
+    //  p_asPath = currentDirectory+p_asPath+"/";
       p_asPath = currentDirectory+p_asPath+"/";
       System.out.println(p_asPath);
       Entry newEntry = new Entry(p_asPath,true);
@@ -203,14 +204,14 @@ public class Filesystem
     {
       System.out.print("Changing directory to ");
       System.out.print("");
+      System.out.println(p_asPath);
 
-      p_asPath += "/";
+      p_asPath = p_asPath+"/";
       boolean check = fileSystemStructure.checkDirExists(p_asPath);
-      if(check)
+      if(!check)
       {
-        currentDirectory = p_asPath+"/";
+        currentDirectory = p_asPath;
       }
-
       return new String("");
     }
 
