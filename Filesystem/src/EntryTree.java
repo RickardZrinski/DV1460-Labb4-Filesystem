@@ -30,6 +30,12 @@ public class EntryTree
 
     private boolean checkDirExists(String path)
     {
+        // Always return that root exists
+        if(path.charAt(0) == '/')
+        {
+            return true;
+        }
+
         boolean exists = false;
 
         String dirPath;
@@ -38,15 +44,12 @@ public class EntryTree
         int index = path.lastIndexOf("/");
 
         dirPath = path.substring(0, index);
-        entryName = path.substring(index+1, path.length());
+        entryName = path.substring(index + 1, path.length());
 
         if(k.containsKey(dirPath))
         {
             exists = true;
         }
-
-        System.out.println("dirPath: " + dirPath);
-        System.out.println("entryName: " + entryName);
 
         return exists;
     }
