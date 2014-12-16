@@ -1,14 +1,17 @@
 import java.io.*;
+import java.util.ArrayList;
 
 public class Filesystem
 {
   private BlockDevice m_BlockDevice;
   private String currentDirectory;
+  private Node root;
+
   public Filesystem(BlockDevice p_BlockDevice)
     {
       m_BlockDevice=p_BlockDevice;
-      currentDirectory = "";
-
+      currentDirectory = "/";
+      root = new Node(null, new Entry("/", true));
     }
 
   public String format()
@@ -35,13 +38,33 @@ public class Filesystem
   public String ls(String p_asPath)
     {
       System.out.print("Listing directory ");
-      System.out.print("");
+      System.out.print(p_asPath);
 
+      Node foundNode = root.getNode(p_asPath);
+
+      for(int i = 0; i< foundNode.getChildren().size(); i++ )
+      {
+        System.out.println(foundNode.getChildren().get(i).getData().getName());
+      }
 
 
       return new String("");
     }
 
+  /*
+    // Verkar funka !
+      [pol]$ ls pol
+      Listing directory polPath element: pol
+      curNode = this
+      Entered while loop
+      Child at path array pos0: pol
+      Child was found.
+      curNode data: pol
+      Path array pos: 1
+      fan --> undermapp till pol
+      kuk --> undermapp till pol
+
+  */
 
   public String create(String p_asPath,byte[] p_abContents)
     {
@@ -156,7 +179,19 @@ public class Filesystem
     {
       System.out.print("Creating directory ");
       System.out.println(p_asPath);
-      return "";
+
+      if(currentDirectory == "/")
+      {
+        Node newNode = new Node(root, new Entry(p_asPath, true));
+        root.addChild(newNode);
+        return newNode.data.getName();
+      }
+
+      Node currentDir = root.getNode(currentDirectory);
+      Node newNode = new Node(currentDir, new Entry(p_asPath, true));
+      currentDir.addChild(newNode);
+
+      return newNode.data.getName();
     }
 
   public String cd(String p_asPath)
@@ -164,6 +199,8 @@ public class Filesystem
       System.out.print("Changing directory to ");
       System.out.print("");
       System.out.println(p_asPath);
+
+      currentDirectory = p_asPath;
 
       return new String("");
     }
