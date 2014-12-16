@@ -136,7 +136,7 @@ public class Filesystem
       Entry newEntry = new Entry(p_asPath,true);
       p_asPath = currentDirectory+newEntry.getName()+"/";
       boolean check = fileSystemStructure.addEntry(p_asPath, newEntry);
-      if(check)
+      if(!check)
       {
         return "";
       }
