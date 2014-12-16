@@ -31,10 +31,10 @@ public class EntryTree
     public boolean checkDirExists(String path)
     {
         // Always return that root exists
-        if(path.charAt(0) == '/')
+        /*if(path.charAt(0) == '/')
         {
             return true;
-        }
+        }*/
 
         boolean exists = false;
         String dirPath;
