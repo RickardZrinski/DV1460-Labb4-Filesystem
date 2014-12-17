@@ -1,11 +1,12 @@
 import java.util.Calendar;
+import java.util.Date;
 
 public class Entry
 {
     boolean isDirectory;
     String name;
     int size;
-    String creationDate;
+    Date creationDate;
     byte[] data;
 
     Entry(String name, boolean isDirectory)
@@ -13,7 +14,7 @@ public class Entry
         this.name = name;
         this.isDirectory = isDirectory;
         Calendar cal = Calendar.getInstance();
-        creationDate = cal.getTime().toString();
+        creationDate = cal.getTime();
     }
 
     public boolean isDirectory()
@@ -31,7 +32,7 @@ public class Entry
         return size;
     }
 
-    public String getCreationDate()
+    public Date getCreationDate()
     {
         return creationDate;
     }
@@ -56,7 +57,7 @@ public class Entry
         this.size = size;
     }
 
-    public void setCreationDate(String creationDate)
+    public void setCreationDate(Date creationDate)
     {
         this.creationDate = creationDate;
     }
