@@ -1,31 +1,32 @@
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 public class Entry
 {
-    boolean isDirectory;
-    String name;
-    int size;
-    Date creationDate;
-    byte[] data;
-    int memBlockIndex;
+    private boolean isDirectory;
+    private String name;
+    private int size;
+    private Date creationDate;
+    private byte[] data;
+    private ArrayList<Integer> memBlockIndex;
 
     Entry(String name, boolean isDirectory)
     {
-        this.memBlockIndex = -1;
+        memBlockIndex = new ArrayList<Integer>();
         this.name = name;
         this.isDirectory = isDirectory;
         Calendar cal = Calendar.getInstance();
         creationDate = cal.getTime();
     }
 
-    public int getMemBlockIndex() {
-        return memBlockIndex;
-    }
-
-    public void setMemBlockIndex(int memBlockIndex) {
-        this.memBlockIndex = memBlockIndex;
-    }
+//    public int getMemBlockIndex() {
+//        return memBlockIndex;
+//    }
+//
+//    public void setMemBlockIndex(int memBlockIndex) {
+//        this.memBlockIndex = memBlockIndex;
+//    }
 
     public boolean isDirectory()
     {
