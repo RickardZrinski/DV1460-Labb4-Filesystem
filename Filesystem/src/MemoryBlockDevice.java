@@ -70,7 +70,7 @@ public class MemoryBlockDevice extends BlockDevice
       if(k[i] == -1)
       {
         nextAvailableIndex = i;
-        System.out.println("given blockIndex is: "+ i);
+        //System.out.println("given blockIndex is: "+ i);
         return nextAvailableIndex;
       }
     }
