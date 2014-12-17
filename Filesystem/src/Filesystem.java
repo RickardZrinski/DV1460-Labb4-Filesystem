@@ -199,7 +199,7 @@ public class Filesystem
       System.out.print("Changing directory to ");
       System.out.print("");
       System.out.println(p_asPath);
-
+                                           // ----> check if path exists must be checked......
       currentDirectory = p_asPath;
 
       return new String("");
