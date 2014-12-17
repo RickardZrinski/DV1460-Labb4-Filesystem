@@ -72,23 +72,24 @@ public class Filesystem
 
   //@TODO needs a system to be decided upon how the structure for size, filename,creationdate, isdirectory, etc should be stored in memblockdevice
   public String create(String p_asPath,byte[] p_abContents)
+  {
+    System.out.print("Creating file ");
+    System.out.print("");
+    //    dumpArray(p_asPath);
+    if(!currentDirectory.getData().getName().contentEquals(p_asPath))
     {
-      System.out.print("Creating file ");
-      System.out.print("");
-  //    dumpArray(p_asPath);
-      if(!currentDirectory.getData().getName().contentEquals(p_asPath))
-      {
-          // läggg till newline före text i byte arrayen.
-        currentDirectory.addChild(new Node(currentDirectory,new Entry(p_asPath,false)));
+      // läggg till newline före text i byte arrayen.
+      currentDirectory.addChild(new Node(currentDirectory,new Entry(p_asPath,false)));
 
-        //ej korrekt
-        String fetch = p_abContents.toString();
 
-        String newLine = '\n'+fetch;
+      //ej korrekt
+      String fetch = p_abContents.toString();
 
-        byte[] test = newLine.getBytes();
+      String newLine = '\n'+fetch;
 
-        m_BlockDevice.writeBlock(m_BlockDevice.getNextAvailableIndex(), p_abContents);
+      byte[] test = newLine.getBytes();
+
+      m_BlockDevice.writeBlock(m_BlockDevice.getNextAvailableIndex(), p_abContents);
 
 //        try
 //        {
@@ -98,10 +99,10 @@ public class Filesystem
 //        {
 //          e.printStackTrace();
 //        }
-      }
-
-      return new String("");
     }
+
+    return new String("");
+  }
 
   public String cat(String p_asPath)
     {
