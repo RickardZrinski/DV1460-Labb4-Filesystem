@@ -3,6 +3,8 @@ public class MemoryBlockDevice extends BlockDevice
   byte[][] m_abContents=new byte[250][512];
   int nextAvailableIndex;
 
+
+
   public MemoryBlockDevice()
   {
     nextAvailableIndex = 0;
@@ -47,4 +49,8 @@ public class MemoryBlockDevice extends BlockDevice
 
       return abBlock; 
     }
+
+  public int getNextAvailableIndex() {
+    return nextAvailableIndex;
+  }
 }
