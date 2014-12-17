@@ -58,7 +58,7 @@ public class MemoryBlockDevice extends BlockDevice
   }
 
   public int getNextAvailableIndex() {
-    return nextAvailableIndex;
+    return nextAvailableIndex = findAvailableIndex();
   }
 
   private int findAvailableIndex()
@@ -69,9 +69,10 @@ public class MemoryBlockDevice extends BlockDevice
       if(m_abContents[i][0] == -1)
       {
         nextAvailableIndex = i;
+        return nextAvailableIndex;
       }
     }
 
-    return nextAvailableIndex;
+    return -1;
   }
 }
