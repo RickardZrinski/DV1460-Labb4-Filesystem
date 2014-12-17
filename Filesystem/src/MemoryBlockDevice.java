@@ -27,6 +27,7 @@ public class MemoryBlockDevice extends BlockDevice
         {
           m_abContents[p_nBlockNr][nIndex]=p_abContents[nIndex];
         }
+      nextAvailableIndex++;
       
       return 1;
       
