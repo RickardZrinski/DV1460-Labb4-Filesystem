@@ -79,7 +79,9 @@ public class Filesystem
     if(!currentDirectory.getData().getName().contentEquals(p_asPath))
     {
       System.out.println("this is executed!");
-      currentDirectory.addChild(new Node(currentDirectory,new Entry(p_asPath,false)));
+      currentDirectory.addChild(new Node(currentDirectory, new Entry(p_asPath, false)));
+
+      System.out.println("next available index is: "+m_BlockDevice.getNextAvailableIndex());
       currentDirectory.getNode(p_asPath).getData().insertArrayIndex(m_BlockDevice.getNextAvailableIndex());
       String fetch = new String(p_abContents);
 
@@ -87,7 +89,18 @@ public class Filesystem
       System.out.println("content of file is: "+newLine);
       byte[] toBytes = newLine.getBytes();
 
+      System.out.println("length of tobytes is: "+toBytes.length);
+      byte[] test = new byte[512];
+      for(int i=0; i<test.length; i++)
+      {
+        test[i] = toBytes[i];
+      }
+
+      String test2 = new String(test);
+      System.out.println("mjaumjau!"+test2);
+
       m_BlockDevice.writeBlock(m_BlockDevice.getNextAvailableIndex(), toBytes);
+      System.out.println("next available index is: "+m_BlockDevice.getNextAvailableIndex());
     }
 
     return new String("");
@@ -97,22 +110,28 @@ public class Filesystem
     {
       System.out.print("Dumping contents of file ");
       System.out.print("");
-      if(!currentDirectory.getData().isDirectory())
+      if(!currentDirectory.getNode(p_asPath).getData().isDirectory())
       {
-        try
-        {
-          BufferedReader br = new BufferedReader(new FileReader(currentDirectory.getData().getName()));
-          String line = null;
-          while(line != null)
-          {
-            System.out.println(line);
-          }
-          br.close();
-        }catch (IOException e)
-        {
-          e.printStackTrace();
-        }
+       // ArrayList<Integer> fetch = new ArrayList<Integer>();
+      //   fetch = currentDirectory.getNode(p_asPath).getData().getArrayIndexes();
 
+//        for(int i=0; i< fetch.size(); i++)
+//        {
+         // byte[] fetchByteArray = m_BlockDevice.readBlock(fetch.get(i));
+        byte[] fetchByteArray = m_BlockDevice.readBlock(0);
+//          for(int j=0; j< fetchByteArray.length;j++)
+//          {
+//            System.out.println(fetchByteArray[j]);
+//          }
+//
+//          byte[] newArray = new byte[fetchByteArray.length];
+//          for(int j=0; j<fetchByteArray.length; j++)
+//          {
+//            newArray[j] = fetchByteArray[j];
+//          }
+          String makeString = new String(fetchByteArray);
+          //System.out.println(makeString);
+       // }
       }
       else
       {
