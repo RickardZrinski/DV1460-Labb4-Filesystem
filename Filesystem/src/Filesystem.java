@@ -78,7 +78,7 @@ public class Filesystem
   //    dumpArray(p_asPath);
       if(!currentDirectory.getData().getName().contentEquals(p_asPath))
       {
-        currentDirectory.addChild(new Node(currentDirectory,new Entry(p_asPath,false)));
+        currentDirectory.addChild(new Node(currentDirectory, new Entry(p_asPath, false)));
 
 //        try
 //        {
@@ -209,10 +209,14 @@ public class Filesystem
   public String rename(String p_asSource,String p_asDestination)
     {
       System.out.print("Renaming file ");
-    //  dumpArray(p_asSource);
+      System.out.print(p_asSource);
       System.out.print(" to ");
-   //   dumpArray(p_asDestination);
-      System.out.print("");
+      System.out.print(p_asDestination);
+
+      Node rename = root.getNode(currentDirectory.getPath());
+      rename.data.setName(p_asDestination);
+
+
       return new String("");
     }
 

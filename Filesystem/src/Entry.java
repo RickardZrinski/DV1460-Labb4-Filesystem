@@ -13,7 +13,10 @@ public class Entry
 
     Entry(String name, boolean isDirectory)
     {
-        memBlockIndex = new ArrayList<Integer>();
+        if(isDirectory() == false)
+        {
+            memBlockIndex = new ArrayList<Integer>();
+        }
         this.name = name;
         this.isDirectory = isDirectory;
         Calendar cal = Calendar.getInstance();
