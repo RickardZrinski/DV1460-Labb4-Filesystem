@@ -80,7 +80,7 @@ public class Filesystem
     {
         currentDirectory.addChild(new Node(currentDirectory, new Entry(p_asPath, false)));
 
-        System.out.println(" Written to block number: " + m_BlockDevice.getNextAvailableIndex());
+        System.out.println(" Writes to block number: " + m_BlockDevice.getNextAvailableIndex());
         currentDirectory.getNode(p_asPath).getData().insertArrayIndex(m_BlockDevice.getNextAvailableIndex());
         String fetch = new String(p_abContents);
 
