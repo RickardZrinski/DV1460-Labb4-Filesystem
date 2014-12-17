@@ -121,4 +121,15 @@ public class Node
             return null;
         }
     }
+
+    public String getPath()
+    {
+        if(this.equals(this.getParent().getParent()))
+        {
+            return this.getData().getName();
+        } else
+        {
+            return this.getParent().getPath() + this.getData().getName() + "/";
+        }
+    }
 }

@@ -33,8 +33,7 @@ public class TestTree
         Node file1 = new Node(three, "file1");
         three.addChild(file1);*/
 
-        Node foundNode = rootNode.getNode("../../one/two");
-
+        Node foundNode = rootNode.getNode("../../one/two/");
 
         if(foundNode != null) {
             System.out.println("The node that was found has data: " + foundNode.getData().getName());
@@ -42,5 +41,8 @@ public class TestTree
         {
             System.out.println("Node was not found");
         }
+
+        String path = two.getPath();
+        System.out.println(path);
     }
 }
