@@ -75,4 +75,9 @@ public class MemoryBlockDevice extends BlockDevice
 
     return -1;
   }
+
+  public void freeMemBlock(int index)
+  {
+      m_abContents[index][0] = -1;
+  }
 }
