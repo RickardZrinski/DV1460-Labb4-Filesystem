@@ -28,6 +28,11 @@ public class Entry
         memBlockIndex.add(insert);
     }
 
+    public ArrayList<Integer> getArrayIndexes()
+    {
+        return memBlockIndex;
+    }
+
     public boolean isDirectory()
     {
         return isDirectory;
