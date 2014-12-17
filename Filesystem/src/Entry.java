@@ -23,13 +23,10 @@ public class Entry
         creationDate = cal.getTime();
     }
 
-//    public int getMemBlockIndex() {
-//        return memBlockIndex;
-//    }
-//
-//    public void setMemBlockIndex(int memBlockIndex) {
-//        this.memBlockIndex = memBlockIndex;
-//    }
+    public void insertArrayIndex(int insert)
+    {
+        memBlockIndex.add(insert);
+    }
 
     public boolean isDirectory()
     {
