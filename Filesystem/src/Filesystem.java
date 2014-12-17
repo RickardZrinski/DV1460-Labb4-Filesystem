@@ -74,6 +74,7 @@ public class Filesystem
     Path array pos: 3
   */
 
+  //@TODO needs a system to be decided upon how the structure for size, filename,creationdate, isdirectory, etc should be stored in memblockdevice
   public String create(String p_asPath,byte[] p_abContents)
     {
       System.out.print("Creating file ");
@@ -81,15 +82,16 @@ public class Filesystem
   //    dumpArray(p_asPath);
       if(!root.getNode(currentDirectory).getData().getName().contentEquals(p_asPath))
       {
-        root.getNode(currentDirectory).getData().g
-        try
-        {
-          FileOutputStream out =  new FileOutputStream(p_asPath);
-          out.write(p_abContents);
-        }catch (IOException  e)
-        {
-          e.printStackTrace();
-        }
+        root.getNode(currentDirectory).addChild(new Node(root.getNode(currentDirectory),new Entry(p_asPath,false)));
+
+//        try
+//        {
+//          FileOutputStream out =  new FileOutputStream(p_asPath);
+//          out.write(p_abContents);
+//        }catch (IOException  e)
+//        {
+//          e.printStackTrace();
+//        }
       }
 
 
