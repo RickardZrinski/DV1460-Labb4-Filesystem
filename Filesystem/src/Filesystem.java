@@ -77,8 +77,23 @@ public class Filesystem
   public String create(String p_asPath,byte[] p_abContents)
     {
       System.out.print("Creating file ");
-  //    dumpArray(p_asPath);
       System.out.print("");
+  //    dumpArray(p_asPath);
+      if(!root.getNode(currentDirectory).getData().getName().contentEquals(p_asPath))
+      {
+        root.getNode(currentDirectory).getData().g
+        try
+        {
+          FileOutputStream out =  new FileOutputStream(p_asPath);
+          out.write(p_abContents);
+        }catch (IOException  e)
+        {
+          e.printStackTrace();
+        }
+      }
+
+
+
       return new String("");
     }
 

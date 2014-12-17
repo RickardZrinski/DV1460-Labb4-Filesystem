@@ -7,13 +7,23 @@ public class Entry
     int size;
     String creationDate;
     byte[] data;
+    int memBlockIndex;
 
     Entry(String name, boolean isDirectory)
     {
+        this.memBlockIndex = -1;
         this.name = name;
         this.isDirectory = isDirectory;
         Calendar cal = Calendar.getInstance();
         creationDate = cal.getTime().toString();
+    }
+
+    public int getMemBlockIndex() {
+        return memBlockIndex;
+    }
+
+    public void setMemBlockIndex(int memBlockIndex) {
+        this.memBlockIndex = memBlockIndex;
     }
 
     public boolean isDirectory()
