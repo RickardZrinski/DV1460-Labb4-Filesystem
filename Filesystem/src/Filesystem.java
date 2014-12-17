@@ -78,7 +78,17 @@ public class Filesystem
   //    dumpArray(p_asPath);
       if(!currentDirectory.getData().getName().contentEquals(p_asPath))
       {
-        currentDirectory.addChild(new Node(currentDirectory, new Entry(p_asPath, false)));
+          // läggg till newline före text i byte arrayen.
+        currentDirectory.addChild(new Node(currentDirectory,new Entry(p_asPath,false)));
+
+        //ej korrekt
+        String fetch = p_abContents.toString();
+
+        String newLine = '\n'+fetch;
+
+        byte[] test = newLine.getBytes();
+
+        m_BlockDevice.writeBlock(m_BlockDevice.getNextAvailableIndex(), p_abContents);
 
 //        try
 //        {
@@ -97,7 +107,6 @@ public class Filesystem
     {
       System.out.print("Dumping contents of file ");
       System.out.print("");
-
       if(!currentDirectory.getData().isDirectory())
       {
         try
@@ -209,14 +218,10 @@ public class Filesystem
   public String rename(String p_asSource,String p_asDestination)
     {
       System.out.print("Renaming file ");
-      System.out.print(p_asSource);
+    //  dumpArray(p_asSource);
       System.out.print(" to ");
-      System.out.print(p_asDestination);
-
-      Node rename = root.getNode(currentDirectory.getPath());
-      rename.data.setName(p_asDestination);
-
-
+   //   dumpArray(p_asDestination);
+      System.out.print("");
       return new String("");
     }
 

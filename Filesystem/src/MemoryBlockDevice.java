@@ -1,6 +1,7 @@
 public class MemoryBlockDevice extends BlockDevice
 {
   byte[][] m_abContents=new byte[250][512];
+  //@TODO make sorted list to make a nicer implementation incase a file is deleted, so there are no empty slots
   int nextAvailableIndex;
 
 

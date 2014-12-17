@@ -57,23 +57,27 @@ public class EntryTree
         Set<String> keys = k.keySet();
 
         int origAmount = calcNrOfSlashes(currentDirectory);
+        System.out.println(currentDirectory);
 
         for(String theKey : keys)
         {
-            if (calcNrOfSlashes(theKey) == origAmount)
+            System.out.println("current keys are: "+theKey);
+            int fetch = calcNrOfSlashes(theKey);
+            System.out.println("current number of slashes in current key is: "+fetch);
+            if ( fetch == origAmount)
             {
                 System.out.println("folders and files within this directory is: " + theKey);
             }
-
         }
     }
 
     private int calcNrOfSlashes(String theKey)
     {
         int counter = 0;
+        String slash = "/";
         for(int i=0; i< theKey.length(); i++)
         {
-            if(theKey.contentEquals("/"))
+            if(theKey == slash)
             {
                 counter++;
             }
