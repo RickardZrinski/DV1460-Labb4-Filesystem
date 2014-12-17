@@ -205,15 +205,23 @@ public class Filesystem
       return new String("");
     }
 
+  // Check this out am not sure if this work.
   public String rename(String p_asSource,String p_asDestination)
+  {
+    System.out.print("Renaming file ");
+    System.out.println(p_asSource);
+    System.out.print(" to ");
+    System.out.print(p_asDestination);
+    Node rename = root.getNode(currentDirectory.getPath());
+    if(rename.getData().isDirectory() == false)
     {
-      System.out.print("Renaming file ");
-    //  dumpArray(p_asSource);
-      System.out.print(" to ");
-   //   dumpArray(p_asDestination);
-      System.out.print("");
-      return new String("");
+      rename.getData().setName(p_asDestination);
+      System.out.println("filename is now changed");
     }
+
+    return new String("");
+  }
+
 
   public String mkdir(String p_asPath)
     {
