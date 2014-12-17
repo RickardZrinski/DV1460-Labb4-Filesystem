@@ -46,11 +46,6 @@ public class Node
         // Split the path to string array
         String[] pathArray = path.split("/");
 
-        for(int i = 0; i < pathArray.length; i++)
-        {
-            System.out.println("Path element: " + pathArray[i]);
-        }
-
         // Current cursor position in the array of paths
         int pathArrayPos = 0;
 
@@ -62,31 +57,21 @@ public class Node
         // Continue traversing tree if previous path element was found and if there are more path elements to traverse
         while(pathFound && (pathArrayPos < pathArray.length))
         {
-            System.out.println("Entered while loop");
             // Assume path element is not found
             pathFound = false;
-
-            System.out.println("Path element in pos " + pathArrayPos + " is " + pathArray[pathArrayPos]);
 
             // Special cases for "dot" and "dot dot" directories
             if(pathArray[pathArrayPos].equals("."))
             {
                 pathFound = true;
-                System.out.println(".");
             } else if(pathArray[pathArrayPos].equals(".."))
             {
                 curNode = curNode.getParent();
                 pathFound = true;
-                System.out.println("Go one directory up (..). Parent is: " + curNode.getData().getName());
             } else
             {
                 // Get children of the cursor node
                 ArrayList<Node> children = curNode.getChildren();
-
-                for (Node child : children)
-                {
-                    System.out.println("Child at path array pos" + pathArrayPos + ": " + child.getData().getName());
-                }
 
                 // Search the children of cursor node for cursor path element
                 for (int i = 0; i < children.size() && !pathFound; i++)
@@ -98,7 +83,6 @@ public class Node
                     if (child.getData().getName().equals(pathArray[pathArrayPos]))
                     {
                         // Path is found and cursor node is set to the child node
-                        System.out.println("Child was found.");
                         pathFound = true;
                         curNode = child;
                     }
@@ -107,9 +91,6 @@ public class Node
 
             // Move one position forward in the path array
             pathArrayPos++;
-
-            System.out.println("curNode data: " + curNode.getData().getName());
-            System.out.println("Path array pos: " + pathArrayPos);
         }
 
         // Make sure the entire path array has been processed and that the last path element was found
