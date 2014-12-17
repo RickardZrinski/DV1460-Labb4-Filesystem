@@ -33,7 +33,7 @@ public class TestTree
         Node file1 = new Node(three, "file1");
         three.addChild(file1);*/
 
-        Node foundNode = rootNode.getNode("one/two");
+        Node foundNode = two.getNode("./");
 
 
         if(foundNode != null) {

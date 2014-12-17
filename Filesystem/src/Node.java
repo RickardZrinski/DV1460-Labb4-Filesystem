@@ -37,69 +37,77 @@ public class Node
 
     public Node getNode(String path)
     {
-        // Remove current directory (.) from path
-        if(path.charAt(0) == '.' && path.charAt(1) == '/')
-        {
-            path = path.substring(2, path.length());
-
-            // If there is nothing in the new path, return this node
-            if(path.isEmpty())
-            {
-                return this;
-            }
-        }
-
+        // Split the path to string array
         String[] pathArray = path.split("/");
+
         for(int i = 0; i < pathArray.length; i++)
         {
             System.out.println("Path element: " + pathArray[i]);
         }
 
+        // Current cursor position in the array of paths
         int pathArrayPos = 0;
 
-        Node curNode;
+        // Current cursor node
+        Node curNode = this;
 
-        // TODO Det fungerar ej att använda "..". Dessutom kan det finnas oändligt antal "..", inte bara på första positionen. Detta måste fixas.
-        if(pathArray[0] == "..")
-        {
-            curNode = this.getParent();
-            pathArrayPos++;
-        } else
-        {
-            curNode = this;
-            System.out.println("curNode = this");
-        }
+        boolean pathFound = true;
 
-        boolean childFound = true;
-        while(childFound && (pathArrayPos < pathArray.length))
+        // Continue traversing tree if previous path element was found and if there are more path elements to traverse
+        while(pathFound && (pathArrayPos < pathArray.length))
         {
             System.out.println("Entered while loop");
-            childFound = false;
+            // Assume path element is not found
+            pathFound = false;
 
-            ArrayList<Node> children = curNode.getChildren();
-            for(Node child: children)
-            {
-                System.out.println("Child at path array pos" + pathArrayPos + ": " + child.getData().getName());
-            }
+            System.out.println("Path element in pos " + pathArrayPos + " is " + pathArray[pathArrayPos]);
 
-            for(int i = 0; i < children.size() && !childFound; i++)
+            // Special cases for "dot" and "dot dot" directories
+            if(pathArray[pathArrayPos].equals("."))
             {
-                Node child = children.get(i);
-                if(child.getData().getName().equals(pathArray[pathArrayPos]))
+                pathFound = true;
+                System.out.println(".");
+            } else if(pathArray[pathArrayPos].equals(".."))
+            {
+                curNode = curNode.getParent();
+                pathFound = true;
+                System.out.println("Go one directory up (..). Parent is: " + curNode.getData().getName());
+            } else
+            {
+                // Get children of the cursor node
+                ArrayList<Node> children = curNode.getChildren();
+
+                for (Node child : children)
                 {
-                    System.out.println("Child was found.");
-                    childFound = true;
-                    curNode = child;
+                    System.out.println("Child at path array pos" + pathArrayPos + ": " + child.getData().getName());
+                }
+
+                // Search the children of cursor node for cursor path element
+                for (int i = 0; i < children.size() && !pathFound; i++)
+                {
+                    // Get child
+                    Node child = children.get(i);
+
+                    // Check if the Entry.name of the cursor node equals the path element
+                    if (child.getData().getName().equals(pathArray[pathArrayPos]))
+                    {
+                        // Path is found and cursor node is set to the child node
+                        System.out.println("Child was found.");
+                        pathFound = true;
+                        curNode = child;
+                    }
                 }
             }
 
+            // Move one position forward in the path array
             pathArrayPos++;
 
             System.out.println("curNode data: " + curNode.getData().getName());
             System.out.println("Path array pos: " + pathArrayPos);
         }
 
-        if(pathArrayPos == pathArray.length && childFound)
+        // Make sure the entire path array has been processed and that the last path element was found
+        if(pathArrayPos == pathArray.length && pathFound)
         {
             return curNode;
         } else
