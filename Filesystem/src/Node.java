@@ -11,6 +11,12 @@ public class Node
 
     Node(Node parent, Entry data)
     {
+        // If parent parameter is null it means that this is the root node, set parent to itself
+        if(parent == null)
+        {
+            parent = this;
+        }
+
         this.parent = parent;
         this.data = data;
     }
