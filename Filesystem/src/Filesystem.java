@@ -40,7 +40,7 @@ public class Filesystem
       System.out.print("Listing directory ");
       System.out.print(p_asPath);
 
-      Node foundNode = root.getNode(p_asPath);
+      Node foundNode = root.getNode(currentDirectory);
 
       for(int i = 0; i< foundNode.getChildren().size(); i++ )
       {
@@ -52,18 +52,26 @@ public class Filesystem
     }
 
   /*
-    // Verkar funka !
-      [pol]$ ls pol
-      Listing directory polPath element: pol
-      curNode = this
-      Entered while loop
-      Child at path array pos0: pol
+    [palle/xxx/ute]$ ls
+    Listing directory .Path element: palle
+     Path element: xxx
+    Path element: ute
+    curNode = this
+    Entered while loop
+      Child at path array pos0: palle
       Child was found.
-      curNode data: pol
-      Path array pos: 1
-      fan --> undermapp till pol
-      kuk --> undermapp till pol
-
+    curNode data: palle
+    Path array pos: 1
+    Entered while loop
+    Child at path array pos1: xxx
+    Child was found.
+    curNode data: xxx
+    Path array pos: 2
+    Entered while loop
+    Child at path array pos2: ute
+    Child was found.
+    curNode data: ute
+    Path array pos: 3
   */
 
   public String create(String p_asPath,byte[] p_abContents)
@@ -199,8 +207,24 @@ public class Filesystem
       System.out.print("Changing directory to ");
       System.out.print("");
       System.out.println(p_asPath);
-                                           // ----> check if path exists must be checked......
-      currentDirectory = p_asPath;
+
+      String cleanString = p_asPath.replaceAll("\r", "").replaceAll("\n", "").trim();
+
+      if(cleanString.equals(new String("..")))
+      {
+
+      }
+
+      if(currentDirectory == "/")
+      {
+        currentDirectory =  p_asPath;
+      }
+
+      else
+      {
+        currentDirectory = currentDirectory +"/"+ p_asPath;
+      }
+
 
       return new String("");
     }
