@@ -1,8 +1,8 @@
 public class MemoryBlockDevice extends BlockDevice
 {
-  byte[][] m_abContents=new byte[250][512];
-  int [] k;
-  int nextAvailableIndex;
+  private byte[][] m_abContents=new byte[250][512];
+  private int [] k;
+  private int nextAvailableIndex;
 
 
   public MemoryBlockDevice()
@@ -33,7 +33,6 @@ public class MemoryBlockDevice extends BlockDevice
     {
       m_abContents[p_nBlockNr][nIndex]=p_abContents[nIndex];
     }
-
 
     k[p_nBlockNr] = 0;
     nextAvailableIndex = findAvailableIndex();
@@ -66,7 +65,6 @@ public class MemoryBlockDevice extends BlockDevice
 
   private int findAvailableIndex()
   {
-
     for(int i = 0; i<250; i++)
     {
       if(k[i] == -1)
