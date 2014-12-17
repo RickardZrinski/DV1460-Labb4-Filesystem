@@ -4,14 +4,14 @@ import java.util.ArrayList;
 public class Filesystem
 {
   private BlockDevice m_BlockDevice;
-  private String currentDirectory;
+  private Node currentDirectory;
   private Node root;
 
   public Filesystem(BlockDevice p_BlockDevice)
     {
       m_BlockDevice=p_BlockDevice;
-      currentDirectory = "/";
       root = new Node(null, new Entry("/", true));
+      currentDirectory = root;
     }
 
   public String format()
@@ -40,13 +40,10 @@ public class Filesystem
       System.out.print("Listing directory ");
       System.out.print(p_asPath);
 
-      Node foundNode = root.getNode(currentDirectory);
-
-      for(int i = 0; i< foundNode.getChildren().size(); i++ )
+      for(int i = 0; i< currentDirectory.getChildren().size(); i++ )
       {
-        System.out.println(foundNode.getChildren().get(i).getData().getName());
+        System.out.println(currentDirectory.getChildren().get(i).getData().getName());
       }
-
 
       return new String("");
     }
@@ -80,9 +77,9 @@ public class Filesystem
       System.out.print("Creating file ");
       System.out.print("");
   //    dumpArray(p_asPath);
-      if(!root.getNode(currentDirectory).getData().getName().contentEquals(p_asPath))
+      if(!currentDirectory.getData().getName().contentEquals(p_asPath))
       {
-        root.getNode(currentDirectory).addChild(new Node(root.getNode(currentDirectory),new Entry(p_asPath,false)));
+        currentDirectory.addChild(new Node(currentDirectory,new Entry(p_asPath,false)));
 
 //        try
 //        {
@@ -94,8 +91,6 @@ public class Filesystem
 //        }
       }
 
-
-
       return new String("");
     }
 
@@ -104,11 +99,11 @@ public class Filesystem
       System.out.print("Dumping contents of file ");
       System.out.print("");
 
-      if(!root.getNode(currentDirectory).getData().isDirectory())
+      if(!currentDirectory.getData().isDirectory())
       {
         try
         {
-          BufferedReader br = new BufferedReader(new FileReader(root.getNode(currentDirectory).getData().getName()));
+          BufferedReader br = new BufferedReader(new FileReader(currentDirectory.getData().getName()));
           String line = null;
           while(line != null)
           {
@@ -227,16 +222,15 @@ public class Filesystem
       System.out.print("Creating directory ");
       System.out.println(p_asPath);
 
-      if(currentDirectory == "/")
+      if(currentDirectory.getData().getName() == "/")
       {
         Node newNode = new Node(root, new Entry(p_asPath, true));
         root.addChild(newNode);
         return newNode.data.getName();
       }
 
-      Node currentDir = root.getNode(currentDirectory);
-      Node newNode = new Node(currentDir, new Entry(p_asPath, true));
-      currentDir.addChild(newNode);
+      Node newNode = new Node(currentDirectory, new Entry(p_asPath, true));
+      currentDirectory.addChild(newNode);
 
       return newNode.data.getName();
     }
@@ -254,23 +248,14 @@ public class Filesystem
 
       }
 
-      if(currentDirectory == "/")
-      {
-        currentDirectory =  p_asPath;
-      }
-
-      else
-      {
-        currentDirectory = currentDirectory +"/"+ p_asPath;
-      }
-
+      currentDirectory = currentDirectory.getNode(p_asPath);
 
       return new String("");
     }
 
   public String pwd()
     {
-      return currentDirectory;
+      return currentDirectory.getPath();
     }
 
 //  private void dumpArray(String p_asArray)
