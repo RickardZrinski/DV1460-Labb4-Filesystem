@@ -75,32 +75,33 @@ public class Filesystem
   {
     System.out.print("Creating file ");
     System.out.print("");
-    //    dumpArray(p_asPath);
+
     if(!currentDirectory.getData().getName().contentEquals(p_asPath))
     {
-      System.out.println("this is executed!");
-      currentDirectory.addChild(new Node(currentDirectory, new Entry(p_asPath, false)));
+        currentDirectory.addChild(new Node(currentDirectory, new Entry(p_asPath, false)));
 
-      System.out.println("next available index is: "+m_BlockDevice.getNextAvailableIndex());
-      currentDirectory.getNode(p_asPath).getData().insertArrayIndex(m_BlockDevice.getNextAvailableIndex());
-      String fetch = new String(p_abContents);
+        System.out.println("next available index is: " + m_BlockDevice.getNextAvailableIndex());
+        currentDirectory.getNode(p_asPath).getData().insertArrayIndex(m_BlockDevice.getNextAvailableIndex());
+        String fetch = new String(p_abContents);
 
-      String newLine = '\n'+fetch;
-      System.out.println("content of file is: "+newLine);
-      byte[] toBytes = newLine.getBytes();
+        String newLine = '\n' + fetch;
+        byte[] toBytes = newLine.getBytes();
 
-      System.out.println("length of tobytes is: "+toBytes.length);
-      byte[] test = new byte[512];
-      for(int i=0; i<test.length; i++)
-      {
-        test[i] = toBytes[i];
-      }
+        byte[] to512bytes = new byte[512];
+        for (int i = 0; i < to512bytes.length; i++) {
+          to512bytes[i] = toBytes[i];
+        }
+        int check = m_BlockDevice.writeBlock(m_BlockDevice.getNextAvailableIndex(), to512bytes);
 
-      String test2 = new String(test);
-      System.out.println("mjaumjau!"+test2);
+        if(check == 1)
+        {
 
-      m_BlockDevice.writeBlock(m_BlockDevice.getNextAvailableIndex(), toBytes);
-      System.out.println("next available index is: "+m_BlockDevice.getNextAvailableIndex());
+        }
+        else
+        {
+          System.out.println("Creation of file failed!");
+        }
+
     }
 
     return new String("");
@@ -112,26 +113,13 @@ public class Filesystem
       System.out.print("");
       if(!currentDirectory.getNode(p_asPath).getData().isDirectory())
       {
-       // ArrayList<Integer> fetch = new ArrayList<Integer>();
-      //   fetch = currentDirectory.getNode(p_asPath).getData().getArrayIndexes();
-
-//        for(int i=0; i< fetch.size(); i++)
-//        {
-         // byte[] fetchByteArray = m_BlockDevice.readBlock(fetch.get(i));
-        byte[] fetchByteArray = m_BlockDevice.readBlock(0);
-//          for(int j=0; j< fetchByteArray.length;j++)
-//          {
-//            System.out.println(fetchByteArray[j]);
-//          }
-//
-//          byte[] newArray = new byte[fetchByteArray.length];
-//          for(int j=0; j<fetchByteArray.length; j++)
-//          {
-//            newArray[j] = fetchByteArray[j];
-//          }
-          String makeString = new String(fetchByteArray);
-          //System.out.println(makeString);
-       // }
+          ArrayList<Integer> fetch = currentDirectory.getNode(p_asPath).getData().getArrayIndexes();
+          for(int i=0; i<fetch.size(); i++)
+          {
+            byte[] fetchByteArray = m_BlockDevice.readBlock(fetch.get(i));
+            String makeString = new String(fetchByteArray);
+            System.out.println(makeString);
+          }
       }
       else
       {
