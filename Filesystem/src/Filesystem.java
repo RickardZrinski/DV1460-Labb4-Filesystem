@@ -85,8 +85,21 @@ public class Filesystem
   public String cat(String p_asPath)
     {
       System.out.print("Dumping contents of file ");
-   //   dumpArray(p_asPath);
       System.out.print("");
+
+      try
+      {
+        BufferedReader br = new BufferedReader(new FileReader(root.getNode(currentDirectory).getData().getName()));
+        String line = null;
+        while(line != null)
+        {
+          System.out.println(line);
+        }
+        br.close();
+      }catch (IOException e)
+      {
+        e.printStackTrace();
+      }
       return new String("");
     }
 
