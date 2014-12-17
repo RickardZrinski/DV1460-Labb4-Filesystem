@@ -240,13 +240,6 @@ public class Filesystem
       System.out.print("");
       System.out.println(p_asPath);
 
-      String cleanString = p_asPath.replaceAll("\r", "").replaceAll("\n", "").trim();
-
-      if(cleanString.equals(new String("..")))
-      {
-
-      }
-
       currentDirectory = currentDirectory.getNode(p_asPath);
 
       return new String("");
