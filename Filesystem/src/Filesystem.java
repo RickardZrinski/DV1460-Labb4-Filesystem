@@ -78,18 +78,14 @@ public class Filesystem
     //    dumpArray(p_asPath);
     if(!currentDirectory.getData().getName().contentEquals(p_asPath))
     {
-      // läggg till newline före text i byte arrayen.
       currentDirectory.addChild(new Node(currentDirectory,new Entry(p_asPath,false)));
 
-
-      //ej korrekt
-      String fetch = p_abContents.toString();
-
+      String fetch = new String(p_abContents);
       String newLine = '\n'+fetch;
 
-      byte[] test = newLine.getBytes();
+      byte[] toBytes = newLine.getBytes();
 
-      m_BlockDevice.writeBlock(m_BlockDevice.getNextAvailableIndex(), p_abContents);
+      m_BlockDevice.writeBlock(m_BlockDevice.getNextAvailableIndex(), toBytes);
 
 //        try
 //        {
