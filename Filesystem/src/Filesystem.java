@@ -37,12 +37,11 @@ public class Filesystem
 
   public String ls(String p_asPath)
     {
-      System.out.print("Listing directory ");
-      System.out.print(p_asPath);
+      System.out.print("Listing directories...\n");
 
       for(int i = 0; i< currentDirectory.getChildren().size(); i++ )
       {
-        System.out.println(currentDirectory.getChildren().get(i).getData().getName());
+        System.out.println(currentDirectory.getChildren().get(i).getData().getName() + " ");
       }
 
       return new String("");
