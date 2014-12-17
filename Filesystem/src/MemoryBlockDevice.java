@@ -1,15 +1,16 @@
 public class MemoryBlockDevice extends BlockDevice
 {
   byte[][] m_abContents=new byte[250][512];
+  int [] k;
   int nextAvailableIndex;
-
 
 
   public MemoryBlockDevice()
   {
+    k = new int [250];
     for (int i = 0; i<250; i++)
     {
-      m_abContents[i][0] = -1;
+      k[i] = -1;
     }
 
     nextAvailableIndex = findAvailableIndex();
@@ -33,6 +34,8 @@ public class MemoryBlockDevice extends BlockDevice
       m_abContents[p_nBlockNr][nIndex]=p_abContents[nIndex];
     }
 
+
+    k[p_nBlockNr] = 0;
     nextAvailableIndex = findAvailableIndex();
 
     return 1;
@@ -66,18 +69,19 @@ public class MemoryBlockDevice extends BlockDevice
 
     for(int i = 0; i<250; i++)
     {
-      if(m_abContents[i][0] == -1)
+      if(k[i] == -1)
       {
         nextAvailableIndex = i;
+        System.out.println("given blockIndex is: "+ i);
         return nextAvailableIndex;
       }
     }
 
-    return -1;
+    return -2;
   }
 
   public void freeMemBlock(int index)
   {
-      m_abContents[index][0] = -1;
+      k[index] = -1;
   }
 }
