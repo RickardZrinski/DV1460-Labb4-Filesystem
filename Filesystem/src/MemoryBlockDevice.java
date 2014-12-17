@@ -7,7 +7,7 @@ public class MemoryBlockDevice extends BlockDevice
 
   public MemoryBlockDevice()
   {
-    for (int f = 0; f<250; f++)
+    for (int i = 0; i<250; i++)
     {
       m_abContents[i][0] = -1;
     }
