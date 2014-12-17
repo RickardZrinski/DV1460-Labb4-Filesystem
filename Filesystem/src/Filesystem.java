@@ -78,23 +78,16 @@ public class Filesystem
     //    dumpArray(p_asPath);
     if(!currentDirectory.getData().getName().contentEquals(p_asPath))
     {
+      System.out.println("this is executed!");
       currentDirectory.addChild(new Node(currentDirectory,new Entry(p_asPath,false)));
-
+      currentDirectory.getNode(p_asPath).getData().insertArrayIndex(m_BlockDevice.getNextAvailableIndex());
       String fetch = new String(p_abContents);
-      String newLine = '\n'+fetch;
 
+      String newLine = '\n'+fetch;
+      System.out.println("content of file is: "+newLine);
       byte[] toBytes = newLine.getBytes();
 
       m_BlockDevice.writeBlock(m_BlockDevice.getNextAvailableIndex(), toBytes);
-
-//        try
-//        {
-//          FileOutputStream out =  new FileOutputStream(p_asPath);
-//          out.write(p_abContents);
-//        }catch (IOException  e)
-//        {
-//          e.printStackTrace();
-//        }
     }
 
     return new String("");
