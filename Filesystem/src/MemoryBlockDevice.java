@@ -1,7 +1,12 @@
 public class MemoryBlockDevice extends BlockDevice
 {
   byte[][] m_abContents=new byte[250][512];
+  int nextAvailableIndex;
 
+  public MemoryBlockDevice()
+  {
+    nextAvailableIndex = 0;
+  }
   public int writeBlock(int p_nBlockNr,byte[] p_abContents)
     {
       if(p_nBlockNr>249 || p_nBlockNr<0)
