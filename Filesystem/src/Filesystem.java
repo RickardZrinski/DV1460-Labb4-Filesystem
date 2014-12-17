@@ -87,19 +87,28 @@ public class Filesystem
       System.out.print("Dumping contents of file ");
       System.out.print("");
 
-      try
+      if(!root.getNode(currentDirectory).getData().isDirectory())
       {
-        BufferedReader br = new BufferedReader(new FileReader(root.getNode(currentDirectory).getData().getName()));
-        String line = null;
-        while(line != null)
+        try
         {
-          System.out.println(line);
+          BufferedReader br = new BufferedReader(new FileReader(root.getNode(currentDirectory).getData().getName()));
+          String line = null;
+          while(line != null)
+          {
+            System.out.println(line);
+          }
+          br.close();
+        }catch (IOException e)
+        {
+          e.printStackTrace();
         }
-        br.close();
-      }catch (IOException e)
-      {
-        e.printStackTrace();
+
       }
+      else
+      {
+        return "This is not a file!";
+      }
+
       return new String("");
     }
 
