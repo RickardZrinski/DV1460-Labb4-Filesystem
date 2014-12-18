@@ -38,11 +38,21 @@ public class Filesystem
 
   public String ls(String p_asPath)
     {
-      System.out.print("Listing directories...\n");
+      Node node = currentDirectory.getNode(p_asPath);
 
-      for(int i = 0; i< currentDirectory.getChildren().size(); i++ )
+      if(node != null)
       {
-        System.out.println(currentDirectory.getChildren().get(i).getData().getName() + " ");
+        System.out.print("Listing directories...\n");
+
+        ArrayList<Node> children = node.getChildren();
+
+        for(Node child : children)
+        {
+          System.out.print(child.getData().getName() + " ");
+        }
+      } else
+      {
+        System.out.println("Invalid path.");
       }
 
       return new String("");
