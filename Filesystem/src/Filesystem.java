@@ -45,7 +45,7 @@ public class Filesystem implements Serializable
 
       if(node != null)
       {
-        System.out.print("Listing directories...\n");
+        System.out.print("listing directories and files\n");
 
         ArrayList<Node> children = node.getChildren();
 
