@@ -218,13 +218,22 @@ public class Filesystem
     System.out.print("Renaming file ");
     System.out.println(p_asSource);
     System.out.print(" to ");
-    System.out.print(p_asDestination);
+    System.out.print(p_asDestination+"\n");
     Node rename = root.getNode(currentDirectory.getPath());
-    if(rename.getData().isDirectory() == false)
+    ArrayList<Node> files = rename.getChildren();
+
+    for(int i = 0; i<files.size(); i++)
     {
-      rename.getData().setName(p_asDestination);
-      System.out.println("filename is now changed");
+      if(files.get(i).getData().isDirectory() == false)
+      {
+        if(files.get(i).getData().getName().compareTo(p_asSource) == 0)
+        {
+          files.get(i).getData().setName(p_asDestination);
+          return new String("File name changed to: "+p_asDestination);
+        }
+      }
     }
+
 
     return new String("");
   }
