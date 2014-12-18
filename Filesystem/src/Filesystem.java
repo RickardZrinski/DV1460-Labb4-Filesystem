@@ -84,8 +84,7 @@ public class Filesystem implements Serializable
     Path array pos: 3
   */
 
-
-  //@TODO needs a system to be decided upon how the structure for size, filename,creationdate, isdirectory, etc should be stored in memblockdevice
+  //@TODO needs to include the byteSize to the Entry object for a newly created node, + be able to handle directory path
   public String create(String p_asPath,byte[] p_abContents)
   {
     System.out.print("Creating file ");
