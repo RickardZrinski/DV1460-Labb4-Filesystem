@@ -164,7 +164,7 @@ public class Filesystem implements Serializable
 
   public Filesystem read(String p_sPath)
   {
-    System.out.println("Reading file "+p_sPath + " to restore filesystem");
+    System.out.println("Reading file " + p_sPath + " to restore filesystem");
     Filesystem filesystem = null;
     ObjectInputStream in;
     try
@@ -356,15 +356,23 @@ public class Filesystem implements Serializable
     }
 
   public String cd(String p_asPath)
+  {
+    Node node = currentDirectory.getNode(p_asPath);
+
+    if(node != null)
     {
       System.out.print("Changing directory to ");
       System.out.print("");
       System.out.println(p_asPath);
 
-      currentDirectory = currentDirectory.getNode(p_asPath);
-
-      return new String("");
+      currentDirectory = node;
+    } else
+    {
+      System.out.println("Invalid path.");
     }
+
+    return new String("");
+  }
 
   public String pwd()
     {
