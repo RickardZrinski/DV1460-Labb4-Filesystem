@@ -211,8 +211,7 @@ public class Filesystem
       System.out.print("");
       return new String("");
     }
-
-  // Check this out am not sure if this work.
+  
   public String rename(String p_asSource,String p_asDestination)
   {
     System.out.print("Renaming file ");
