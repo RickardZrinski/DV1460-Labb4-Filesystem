@@ -61,6 +61,30 @@ public class Filesystem implements Serializable
       return new String("");
     }
 
+  /*
+    [palle/xxx/ute]$ ls
+    Listing directory .Path element: palle
+     Path element: xxx
+    Path element: ute
+    curNode = this
+    Entered while loop
+      Child at path array pos0: palle
+      Child was found.
+    curNode data: palle
+    Path array pos: 1
+    Entered while loop
+    Child at path array pos1: xxx
+    Child was found.
+    curNode data: xxx
+    Path array pos: 2
+    Entered while loop
+    Child at path array pos2: ute
+    Child was found.
+    curNode data: ute
+    Path array pos: 3
+  */
+
+  //@TODO needs to include the byteSize to the Entry object for a newly created node, + be able to handle directory path
   public String create(String p_asPath,byte[] p_abContents)
   {
     System.out.print("Creating file ");
@@ -182,10 +206,78 @@ public class Filesystem implements Serializable
   public String copy(String p_asSource,String p_asDestination)
     {
       System.out.print("Copying file from ");
-    //  dumpArray(p_asSource);
-      System.out.print(" to ");
-    //  dumpArray(p_asDestination);
-      System.out.print("");
+      Node sourceDirectoryExists;
+      Node getSourceFile = null;
+      Node destDirectoryExists;
+
+      String[] source = p_asSource.split("/");
+      String pathTo = "";
+      for(int i = 0;i < source.length-1;i++)
+      {
+        pathTo += source[i] + "/";
+      }
+      //om det skickas in en källpath tillsammans med källfilen
+      if(source.length > 1)
+      {
+        sourceDirectoryExists = currentDirectory.getNode(pathTo);
+        if(sourceDirectoryExists != null)
+        {
+          getSourceFile = currentDirectory.getNode(source[source.length]);
+        }
+      }
+      //annars om det skickas in bara en fil som källa
+      if(source.length < 1 && !currentDirectory.getNode(p_asSource).getData().isDirectory())
+      {
+        getSourceFile = currentDirectory.getNode(p_asSource);
+      }
+
+
+      String[] target = p_asDestination.split("/");
+      pathTo = "";
+      for(int i = 0;i < target.length-1;i++)
+      {
+        pathTo += target[i] + "/";
+      }
+      //om målfilen har en path
+      if(target.length > 1 && getSourceFile != null)
+      {
+        destDirectoryExists = currentDirectory.getNode(pathTo);
+        if(destDirectoryExists != null)
+        {
+          //lägger till gamla filen till specifierad path där den ska vara i detta fallet, och döper om den till målfilsnamn
+          getSourceFile.getData().setName(target[target.length-1]);
+          currentDirectory.getNode(pathTo).addChild(getSourceFile);
+        }
+        else
+        {
+          System.out.println("Error! target directory or source target file doesn't exist!");
+        }
+      }
+      //om målfilen inte har en path
+      else if(target.length < 1 && getSourceFile != null)
+      {
+          Node check = currentDirectory.getNode(p_asDestination);
+
+
+          //lägger till gamla filen till root där den ska vara i detta fallet, och döper om den till målfilsnamn
+          getSourceFile.getData().setName(p_asDestination);
+          currentDirectory.addChild(getSourceFile);
+          ArrayList<Integer> fetch = getSourceFile.getData().getArrayIndexes();
+
+
+          //kopiera allokeringar från fetch till nya allokeringar i memblockDevice
+          for(int i=0; i<fetch.size();i++)
+          {
+            int freeIndex = m_BlockDevice.getNextAvailableIndex();
+            byte[] copyArray = m_BlockDevice.readBlock(fetch.get(i));
+            m_BlockDevice.writeBlock(freeIndex, copyArray);
+            currentDirectory.getNode(getSourceFile.getData().getName()).getData().insertArrayIndex(freeIndex);
+          }
+      }
+      else
+      {
+          System.out.println("Error! target directory or sourge target file doesn't exist!");
+      }
       return new String("");
     }
 
