@@ -168,6 +168,7 @@ public class Filesystem
     return new String("");
   }
 
+  //@TODO read also needs to load the file for nodes that represents directories/files
   public String read(String p_sPath)
   {
     System.out.print("Reading file "+p_sPath+" to blockdevice");
