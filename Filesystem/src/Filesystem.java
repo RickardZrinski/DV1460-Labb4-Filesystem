@@ -228,10 +228,13 @@ public class Filesystem
   public String append(String p_asSource,String p_asDestination)
     {
       System.out.print("Appending file ");
-  //    dumpArray(p_asSource);
+      System.out.print(p_asSource);
       System.out.print(" to ");
-    //  dumpArray(p_asDestination);
-      System.out.print("");
+      System.out.print(p_asDestination);
+
+
+
+
       return new String("");
     }
   
