@@ -9,4 +9,5 @@ public abstract class BlockDevice
   public abstract byte[] readBlock(int p_nBlockNr);
 
   public abstract int getNextAvailableIndex();
+  public abstract void freeMemBlock(int index);
 }

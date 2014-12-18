@@ -113,4 +113,26 @@ public class Node
             return this.getParent().getPath() + this.getData().getName() + "/";
         }
     }
+
+    public boolean remove(String path)
+    {
+        boolean isRemoved;
+
+        Node node = this.getNode(path);
+
+        // Only delete the node if it has no children
+        if(node.getChildren().size() == 0)
+        {
+            ArrayList<Node> pChildren = node.getParent().getChildren();
+
+            pChildren.remove(node);
+
+            isRemoved = true;
+        } else
+        {
+            isRemoved = false;
+        }
+
+        return isRemoved;
+    }
 }

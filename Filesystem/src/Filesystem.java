@@ -1,4 +1,5 @@
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Filesystem
@@ -185,12 +186,24 @@ public class Filesystem
   }
 
   public String rm(String p_asPath)
+  {
+    System.out.print("Removing file ");
+
+    // Get node to remove
+    Node node = this.currentDirectory.getNode(p_asPath);
+
+    // We need to delete the data in memory before removing the node
+    ArrayList<Integer> memIndexes = node.getData().getArrayIndexes();
+    for(Integer index: memIndexes)
     {
-      System.out.print("Removing file ");
-    //  dumpArray(p_asPath);
-      System.out.print("");
-      return new String("");
+      this.m_BlockDevice.freeMemBlock(index);
     }
+
+    // Remove the node
+    this.currentDirectory.remove(p_asPath);
+
+    return new String("");
+  }
 
   public String copy(String p_asSource,String p_asDestination)
     {
