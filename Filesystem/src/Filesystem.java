@@ -404,7 +404,7 @@ public class Filesystem implements Serializable
   {
     Node node = currentDirectory.getNode(p_asPath);
 
-    if(node != null)
+    if(node != null && node.getData().isDirectory() == true)
     {
       System.out.print("Changing directory to ");
       System.out.print("");
