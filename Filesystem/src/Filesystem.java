@@ -61,18 +61,35 @@ public class Filesystem implements Serializable
       return new String("");
     }
 
-  //@TODO needs to include the byteSize to the Entry object for a newly created node, + be able to handle directory path
+  //@TODO needs to include the byteSize to the Entry object for a newly created node
   public String create(String p_asPath,byte[] p_abContents)
   {
     System.out.print("Creating file ");
     System.out.print("");
 
-    if(!currentDirectory.getData().getName().contentEquals(p_asPath))
+    String[] pathArray = p_asPath.split("/");
+    String pathTo = "";
+    for(int i = 0;i < pathArray.length-1;i++)
     {
-        currentDirectory.addChild(new Node(currentDirectory, new Entry(p_asPath, false)));
+      pathTo += pathArray[i] + "/";
+    }
+
+    Node parentNode;
+    if(pathArray.length > 1)
+    {
+      parentNode = currentDirectory.getNode(pathTo);
+    } else
+    {
+      parentNode = currentDirectory;
+    }
+
+    if(parentNode != null)
+    {
+        Node newNode = new Node(currentDirectory, new Entry(pathArray[pathArray.length-1], false));
+        parentNode.addChild(newNode);
 
         System.out.println(" Writes to block number: " + m_BlockDevice.getNextAvailableIndex());
-        currentDirectory.getNode(p_asPath).getData().insertArrayIndex(m_BlockDevice.getNextAvailableIndex());
+        newNode.getData().insertArrayIndex(m_BlockDevice.getNextAvailableIndex());
         String fetch = new String(p_abContents);
 
         String newLine = '\n' + fetch;
@@ -93,6 +110,9 @@ public class Filesystem implements Serializable
           System.out.println("Creation of file failed!");
         }
 
+    } else
+    {
+      System.out.println("Invalid path.");
     }
 
     return new String("");
