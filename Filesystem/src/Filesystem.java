@@ -368,23 +368,15 @@ public class Filesystem implements Serializable
     System.out.println(p_asSource);
     System.out.print(" to ");
     System.out.print(p_asDestination+"\n");
-    Node rename = root.getNode(currentDirectory.getPath());
-    ArrayList<Node> files = rename.getChildren();
+    Node rename = currentDirectory.getNode(p_asSource);
 
-    for(int i = 0; i<files.size(); i++)
+    if(rename.getData().isDirectory() == true)
     {
-      if(files.get(i).getData().isDirectory() == false)
-      {
-        if(files.get(i).getData().getName().compareTo(p_asSource) == 0)
-        {
-          files.get(i).getData().setName(p_asDestination);
-          return new String("File name changed to: "+p_asDestination);
-        }
-      }
+      return new String(" This is a directory, sorry");
     }
 
-
-    return new String("");
+    rename.getData().setName(p_asDestination);
+    return new String("Name changed to: " + p_asDestination);
   }
 
 
