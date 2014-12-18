@@ -423,7 +423,8 @@ public class Filesystem implements Serializable
       System.out.println(p_asPath);
 
       currentDirectory = node;
-    } else
+    }
+    else
     {
       System.out.println("Invalid path.");
     }
@@ -435,6 +436,7 @@ public class Filesystem implements Serializable
     {
       return currentDirectory.getPath();
     }
+
 
 //  private void dumpArray(String p_asArray)
 //    {
