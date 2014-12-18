@@ -61,29 +61,6 @@ public class Filesystem implements Serializable
       return new String("");
     }
 
-  /*
-    [palle/xxx/ute]$ ls
-    Listing directory .Path element: palle
-     Path element: xxx
-    Path element: ute
-    curNode = this
-    Entered while loop
-      Child at path array pos0: palle
-      Child was found.
-    curNode data: palle
-    Path array pos: 1
-    Entered while loop
-    Child at path array pos1: xxx
-    Child was found.
-    curNode data: xxx
-    Path array pos: 2
-    Entered while loop
-    Child at path array pos2: ute
-    Child was found.
-    curNode data: ute
-    Path array pos: 3
-  */
-
   //@TODO needs to include the byteSize to the Entry object for a newly created node, + be able to handle directory path
   public String create(String p_asPath,byte[] p_abContents)
   {
