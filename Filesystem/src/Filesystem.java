@@ -15,6 +15,7 @@ public class Filesystem
       currentDirectory = root;
     }
 
+  //@TODO needs to remove the tree as well
   public String format()
   {
 
