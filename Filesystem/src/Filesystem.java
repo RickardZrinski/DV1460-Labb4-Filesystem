@@ -201,66 +201,72 @@ public class Filesystem implements Serializable
   }
 
   public String copy(String p_asSource,String p_asDestination)
+  {
+    System.out.print("Copying file from ");
+
+    Node sourceDirectoryExists = null;
+    Node getSourceFile = null;
+    Node destDirectoryExists = null;
+
+    String[] source = p_asSource.split("/");
+    for(int i=0; i<source.length; i++)
     {
-      System.out.print("Copying file from ");
-      Node sourceDirectoryExists;
-      Node getSourceFile = null;
-      Node destDirectoryExists;
-
-      String[] source = p_asSource.split("/");
-      String pathTo = "";
-      for(int i = 0;i < source.length-1;i++)
+      System.out.println(source[i]);
+    }
+    String pathTo = "";
+    for(int i = 0;i < source.length-1;i++)
+    {
+      pathTo += source[i] + "/";
+    }
+    //om det skickas in en källpath tillsammans med källfilen
+    if(source.length > 1)
+    {
+      sourceDirectoryExists = currentDirectory.getNode(pathTo);
+      if(sourceDirectoryExists != null)
       {
-        pathTo += source[i] + "/";
+        getSourceFile = currentDirectory.getNode(source[source.length-1]);
       }
-      //om det skickas in en källpath tillsammans med källfilen
-      if(source.length > 1)
+    }
+    //annars om det skickas in bara en fil som källa
+    if(source.length == 1 && !currentDirectory.getNode(p_asSource).getData().isDirectory())
+    {
+      getSourceFile = currentDirectory.getNode(p_asSource);
+    }
+
+
+    System.out.println("To ");
+    String[] target = p_asDestination.split("/");
+    pathTo = "";
+    for(int i=0; i< target.length;i++)
+    {
+      System.out.println(target[i]);
+    }
+
+    for(int i = 0;i < target.length-1;i++)
+    {
+      pathTo += target[i] + "/";
+    }
+    //om målfilen har en path
+    if(target.length > 1 && getSourceFile != null)
+    {
+      destDirectoryExists = currentDirectory.getNode(pathTo);
+      if(destDirectoryExists != null)
       {
-        sourceDirectoryExists = currentDirectory.getNode(pathTo);
-        if(sourceDirectoryExists != null)
+        //lägger till gamla filen till specifierad path där den ska vara i detta fallet, och döper om den till målfilsnamn
+        Node check = currentDirectory.getNode(target[target.length - 1]);
+        //om målfil med path redan finns så tas den bort
+        if(check != null)
         {
-          getSourceFile = currentDirectory.getNode(source[source.length]);
+          rm(target[target.length-1]);
         }
-      }
-      //annars om det skickas in bara en fil som källa
-      if(source.length < 1 && !currentDirectory.getNode(p_asSource).getData().isDirectory())
-      {
-        getSourceFile = currentDirectory.getNode(p_asSource);
-      }
-
-
-      String[] target = p_asDestination.split("/");
-      pathTo = "";
-      for(int i = 0;i < target.length-1;i++)
-      {
-        pathTo += target[i] + "/";
-      }
-      //om målfilen har en path
-      if(target.length > 1 && getSourceFile != null)
-      {
-        destDirectoryExists = currentDirectory.getNode(pathTo);
-        if(destDirectoryExists != null)
-        {
-          //lägger till gamla filen till specifierad path där den ska vara i detta fallet, och döper om den till målfilsnamn
-          getSourceFile.getData().setName(target[target.length-1]);
-          currentDirectory.getNode(pathTo).addChild(getSourceFile);
-        }
+        //om målfil inte finns
         else
         {
-          System.out.println("Error! target directory or source target file doesn't exist!");
-        }
-      }
-      //om målfilen inte har en path
-      else if(target.length < 1 && getSourceFile != null)
-      {
-          Node check = currentDirectory.getNode(p_asDestination);
+          currentDirectory.getNode(pathTo).addChild(new Node(destDirectoryExists,new Entry(target[target.length-1],false)));
 
-
-          //lägger till gamla filen till root där den ska vara i detta fallet, och döper om den till målfilsnamn
-          getSourceFile.getData().setName(p_asDestination);
-          currentDirectory.addChild(getSourceFile);
-          ArrayList<Integer> fetch = getSourceFile.getData().getArrayIndexes();
-
+          ArrayList<Integer> fetch = currentDirectory.getNode(getSourceFile.getData().getName()).getData().getArrayIndexes();
+          System.out.println("fetch size is: "+fetch.size());
+          int[] savedIndexes = new int[fetch.size()];
 
           //kopiera allokeringar från fetch till nya allokeringar i memblockDevice
           for(int i=0; i<fetch.size();i++)
@@ -268,15 +274,86 @@ public class Filesystem implements Serializable
             int freeIndex = m_BlockDevice.getNextAvailableIndex();
             byte[] copyArray = m_BlockDevice.readBlock(fetch.get(i));
             m_BlockDevice.writeBlock(freeIndex, copyArray);
-            currentDirectory.getNode(getSourceFile.getData().getName()).getData().insertArrayIndex(freeIndex);
+            savedIndexes[i] = freeIndex;
           }
+
+          for(int i=0; i< savedIndexes.length; i++)
+          {
+            currentDirectory.getNode(target[target.length-1]).getData().insertArrayIndex(savedIndexes[i]);
+          }
+        }
+
       }
       else
       {
-          System.out.println("Error! target directory or sourge target file doesn't exist!");
+        System.out.println("Error! target directory or source target file doesn't exist!");
       }
-      return new String("");
     }
+    //om målfilen inte har en path
+    else if(target.length == 1 && getSourceFile != null)
+    {
+      Node check = currentDirectory.getNode(p_asDestination);
+      //om målfil ej existerar
+      if(check == null)
+      {
+        //lägger till gamla filen till root där den ska vara i detta fallet, och döper om den till målfilsnamn
+        System.out.println("name of target.length-1 is: "+target[target.length-1]);
+        currentDirectory.addChild(new Node(currentDirectory,new Entry(target[target.length-1],false)));
+
+        //byt p_asSource mot source[source.length-1]
+        //byt p_asSource mot source[source.length-1]
+        ArrayList<Integer> fetch = currentDirectory.getNode(source[source.length-1]).getData().getArrayIndexes();
+        int[] savedIndexes = new int[fetch.size()];
+
+        //kopiera allokeringar från fetch till nya allokeringar i memblockDevice
+        for(int i=0; i<fetch.size();i++)
+        {
+          int freeIndex = m_BlockDevice.getNextAvailableIndex();
+          byte[] copyArray = m_BlockDevice.readBlock(fetch.get(i));
+
+          m_BlockDevice.writeBlock(freeIndex, copyArray);
+          savedIndexes[i] = freeIndex;
+        }
+
+        for(int i=0; i< savedIndexes.length; i++)
+        {
+          currentDirectory.getNode(target[target.length-1]).getData().insertArrayIndex(savedIndexes[i]);
+        }
+      }
+      //om målfil existerar, så tas den bort först
+      if(check != null)
+      {
+        rm(p_asDestination);
+
+        currentDirectory.addChild(new Node(currentDirectory,new Entry(target[target.length-1],false)));
+
+        ArrayList<Integer> fetch = currentDirectory.getNode(source[source.length-1]).getData().getArrayIndexes();
+        int[] savedIndexes = new int[fetch.size()];
+
+        //kopiera allokeringar från fetch till nya allokeringar i memblockDevice
+        for(int i=0; i<fetch.size();i++)
+        {
+          int freeIndex = m_BlockDevice.getNextAvailableIndex();
+          byte[] copyArray = m_BlockDevice.readBlock(fetch.get(i));
+
+          m_BlockDevice.writeBlock(freeIndex, copyArray);
+          savedIndexes[i] = freeIndex;
+        }
+
+        for(int i=0; i< savedIndexes.length; i++)
+        {
+          currentDirectory.getNode(target[target.length-1]).getData().insertArrayIndex(savedIndexes[i]);
+        }
+      }
+
+
+    }
+    else
+    {
+      System.out.println("Error! target directory or source target file doesn't exist!");
+    }
+    return new String("");
+  }
 
   public String append(String p_asSource,String p_asDestination)
   {
