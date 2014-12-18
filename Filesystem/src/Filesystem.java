@@ -14,27 +14,28 @@ public class Filesystem
       root = new Node(null, new Entry("/", true));
       currentDirectory = root;
     }
-
-  //@TODO needs to remove the tree as well
+  
   public String format()
   {
+    root = new Node(null, new Entry("/", true));
+    currentDirectory = root;
 
-      byte[] format =new byte[512];
-      for (int f = 0; f<512; f++)
-      {
-        format[f] = -1;
-      }
+    byte[] format =new byte[512];
+    for (int f = 0; f<512; f++)
+    {
+      format[f] = -1;
+    }
 
-      for(int i = 0; i<250; i++)
-      {
-         int formatResponse = m_BlockDevice.writeBlock(i,format);
-         if(formatResponse == -1)
-         {
-           return new String("Diskformat failed");
-         }
+    for(int i = 0; i<250; i++)
+    {
+       int formatResponse = m_BlockDevice.writeBlock(i,format);
+       if(formatResponse == -1)
+       {
+         return new String("Diskformat failed");
+       }
 
-      }
-      return new String("Diskformat sucessfull");
+    }
+    return new String("Diskformat sucessfull");
   }
 
   public String ls(String p_asPath)
