@@ -269,20 +269,34 @@ public class Filesystem
 
   public String mkdir(String p_asPath)
     {
-      System.out.print("Creating directory ");
-      System.out.println(p_asPath);
-
-      if(currentDirectory.getData().getName() == "/")
+      String[] pathArray = p_asPath.split("/");
+      String pathTo = "";
+      for(int i = 0;i < pathArray.length-1;i++)
       {
-        Node newNode = new Node(root, new Entry(p_asPath, true));
-        root.addChild(newNode);
-        return newNode.data.getName();
+        pathTo += pathArray[i] + "/";
       }
 
-      Node newNode = new Node(currentDirectory, new Entry(p_asPath, true));
-      currentDirectory.addChild(newNode);
+      Node parentNode;
+      if(pathArray.length > 1)
+      {
+        parentNode = currentDirectory.getNode(pathTo);
+      } else
+      {
+        parentNode = currentDirectory;
+      }
 
-      return newNode.data.getName();
+      if (parentNode != null)
+      {
+        System.out.print("Creating directory ");
+
+        Node newNode = new Node(parentNode, new Entry(pathArray[pathArray.length - 1], true));
+        parentNode.addChild(newNode);
+
+        return newNode.getData().getName();
+      } else
+      {
+        return "Invalid path.";
+      }
     }
 
   public String cd(String p_asPath)
