@@ -1,5 +1,6 @@
 import java.io.*;
 import java.lang.reflect.Array;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public class Filesystem
@@ -258,7 +259,7 @@ public class Filesystem
     }
 
     ArrayList<Integer> sourceBlockIndex = currentDirectory.getNode(p_asSource).getData().getArrayIndexes();
-    ArrayList<Integer> destinationBlockIndex = currentDirectory.getNode(p_asSource).getData().getArrayIndexes();
+    ArrayList<Integer> destinationBlockIndex = currentDirectory.getNode(p_asDestination).getData().getArrayIndexes();
 
     String sourceString = "";
     for(int i=0; i<sourceBlockIndex.size(); i++)
@@ -281,19 +282,24 @@ public class Filesystem
       destinationBlockIndex.remove(i);
     }
 
-    destinationString = destinationString + sourceString;
+    byte[] sourceToBytes  = sourceString.getBytes();
+    byte[] destinationToByes = destinationString.getBytes();
 
-    byte[] toBytes = destinationString.getBytes();
 
-    byte[] to512bytes = new byte[512];
-    for (int i = 0; i < to512bytes.length; i++)
-    {
-      to512bytes[i] = toBytes[i];
-    }
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream(512);
+
+    outputStream.write(sourceToBytes,0,256);
+    outputStream.write(destinationToByes,0,256);
+
+    byte result[] = outputStream.toByteArray();
+
+    System.out.println("\nsize is: "+result.length);
+
+    //////////////////////////////////////////
 
     int blockIndex = m_BlockDevice.getNextAvailableIndex();
     currentDirectory.getNode(p_asDestination).getData().insertArrayIndex(blockIndex);
-    int appendedfiles = m_BlockDevice.writeBlock(blockIndex, to512bytes);
+    int appendedfiles = m_BlockDevice.writeBlock(blockIndex,result);
 
     if(appendedfiles == 1)
     {
