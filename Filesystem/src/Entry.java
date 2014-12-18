@@ -29,6 +29,10 @@ public class Entry implements Serializable
         memBlockIndex.add(insert);
     }
 
+    public int getArrayIndexSize()
+    {
+        return memBlockIndex.size();
+    }
     public ArrayList<Integer> getArrayIndexes()
     {
         return memBlockIndex;
