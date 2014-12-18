@@ -51,7 +51,7 @@ public class EntryTree
         return exists;
     }
 
-    //@TODO must find a way to print all children for a given parent
+
     public void printChildren(String currentDirectory)
     {
         Set<String> keys = k.keySet();
