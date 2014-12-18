@@ -35,7 +35,7 @@ public class Filesystem
        }
 
     }
-    return new String("Diskformat sucessfull");
+    return new String("Diskformat successful");
   }
 
   public String ls(String p_asPath)
