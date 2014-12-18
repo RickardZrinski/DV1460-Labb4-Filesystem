@@ -235,7 +235,6 @@ public class Filesystem implements Serializable
       getSourceFile = currentDirectory.getNode(p_asSource);
     }
 
-
     System.out.println("To ");
     String[] target = p_asDestination.split("/");
     pathTo = "";
@@ -260,13 +259,14 @@ public class Filesystem implements Serializable
         if(check != null)
         {
           rm(target[target.length-1]);
+          check = null;
         }
         //om målfil inte finns
-        else
+        else if(check == null)
         {
-          currentDirectory.getNode(pathTo).addChild(new Node(destDirectoryExists, new Entry(target[target.length - 1], false)));
+          destDirectoryExists.addChild(new Node(destDirectoryExists, new Entry(target[target.length - 1], false)));
 
-          ArrayList<Integer> fetch = currentDirectory.getNode(getSourceFile.getData().getName()).getData().getArrayIndexes();
+          ArrayList<Integer> fetch = currentDirectory.getNode(source[source.length-1]).getData().getArrayIndexes();
           System.out.println("fetch size is: "+fetch.size());
           int[] savedIndexes = new int[fetch.size()];
 
@@ -284,17 +284,19 @@ public class Filesystem implements Serializable
             currentDirectory.getNode(target[target.length-1]).getData().insertArrayIndex(savedIndexes[i]);
           }
         }
-
-      }
-      else
-      {
-        System.out.println("Error! target directory or source target file doesn't exist!");
       }
     }
     //om målfilen inte har en path
     else if(target.length == 1 && getSourceFile != null)
     {
       Node check = currentDirectory.getNode(p_asDestination);
+
+      //om målfil existerar, så tas den bort först
+      if(check != null)
+      {
+        rm(p_asDestination);
+        check = null;
+      }
       //om målfil ej existerar
       if(check == null)
       {
@@ -302,8 +304,6 @@ public class Filesystem implements Serializable
         System.out.println("name of target.length-1 is: "+target[target.length-1]);
         currentDirectory.addChild(new Node(currentDirectory,new Entry(target[target.length-1],false)));
 
-        //byt p_asSource mot source[source.length-1]
-        //byt p_asSource mot source[source.length-1]
         ArrayList<Integer> fetch = currentDirectory.getNode(source[source.length-1]).getData().getArrayIndexes();
         int[] savedIndexes = new int[fetch.size()];
 
@@ -322,35 +322,8 @@ public class Filesystem implements Serializable
           currentDirectory.getNode(target[target.length-1]).getData().insertArrayIndex(savedIndexes[i]);
         }
       }
-      //om målfil existerar, så tas den bort först
-      if(check != null)
-      {
-        rm(p_asDestination);
-
-        currentDirectory.addChild(new Node(currentDirectory,new Entry(target[target.length-1],false)));
-
-        ArrayList<Integer> fetch = currentDirectory.getNode(source[source.length-1]).getData().getArrayIndexes();
-        int[] savedIndexes = new int[fetch.size()];
-
-        //kopiera allokeringar från fetch till nya allokeringar i memblockDevice
-        for(int i=0; i<fetch.size();i++)
-        {
-          int freeIndex = m_BlockDevice.getNextAvailableIndex();
-          byte[] copyArray = m_BlockDevice.readBlock(fetch.get(i));
-
-          m_BlockDevice.writeBlock(freeIndex, copyArray);
-          savedIndexes[i] = freeIndex;
-        }
-
-        for(int i=0; i< savedIndexes.length; i++)
-        {
-          currentDirectory.getNode(target[target.length-1]).getData().insertArrayIndex(savedIndexes[i]);
-        }
-      }
-
-
     }
-    else
+    else if(getSourceFile == null)
     {
       System.out.println("Error! target directory or source target file doesn't exist!");
     }
