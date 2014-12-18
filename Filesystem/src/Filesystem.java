@@ -257,13 +257,13 @@ public class Filesystem
       return new String("\nDestionation path is a directory !");
     }
 
-    ArrayList<Integer> sourceBlockindex = currentDirectory.getNode(p_asSource).getData().getArrayIndexes();
+    ArrayList<Integer> sourceBlockIndex = currentDirectory.getNode(p_asSource).getData().getArrayIndexes();
     ArrayList<Integer> destinationBlockIndex = currentDirectory.getNode(p_asSource).getData().getArrayIndexes();
 
     String sourceString = "";
-    for(int i=0; i<sourceBlockindex.size(); i++)
+    for(int i=0; i<sourceBlockIndex.size(); i++)
     {
-      byte[] fetchByteArray = m_BlockDevice.readBlock(sourceBlockindex.get(i));
+      byte[] fetchByteArray = m_BlockDevice.readBlock(sourceBlockIndex.get(i));
       sourceString = new String(fetchByteArray);
     }
 
@@ -304,7 +304,7 @@ public class Filesystem
     {
       return new String("Creation of file failed!");
     }
-    
+
   }
 
   
