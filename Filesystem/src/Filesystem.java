@@ -185,18 +185,20 @@ public class Filesystem implements Serializable
     System.out.print("Removing file ");
 
     // Get node to remove
-    Node node = this.currentDirectory.getNode(p_asPath);
-
-    // We need to delete the data in memory before removing the node
-    ArrayList<Integer> memIndexes = node.getData().getArrayIndexes();
-    for(Integer index: memIndexes)
+    if(!currentDirectory.getNode(p_asPath).getData().isDirectory())
     {
-      this.m_BlockDevice.freeMemBlock(index);
+      Node node = this.currentDirectory.getNode(p_asPath);
+
+      // We need to delete the data in memory before removing the node
+      ArrayList<Integer> memIndexes = node.getData().getArrayIndexes();
+      for(Integer index: memIndexes)
+      {
+        this.m_BlockDevice.freeMemBlock(index);
+      }
+
+      // Remove the node
+      this.currentDirectory.remove(p_asPath);
     }
-
-    // Remove the node
-    this.currentDirectory.remove(p_asPath);
-
     return new String("");
   }
 
@@ -262,7 +264,7 @@ public class Filesystem implements Serializable
         //om målfil inte finns
         else
         {
-          currentDirectory.getNode(pathTo).addChild(new Node(destDirectoryExists,new Entry(target[target.length-1],false)));
+          currentDirectory.getNode(pathTo).addChild(new Node(destDirectoryExists, new Entry(target[target.length - 1], false)));
 
           ArrayList<Integer> fetch = currentDirectory.getNode(getSourceFile.getData().getName()).getData().getArrayIndexes();
           System.out.println("fetch size is: "+fetch.size());
