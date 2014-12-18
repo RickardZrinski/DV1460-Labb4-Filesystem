@@ -3,7 +3,7 @@ import java.lang.reflect.Array;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
-public class Filesystem
+public class Filesystem implements Serializable
 {
   private BlockDevice m_BlockDevice;
   private Node currentDirectory;
@@ -143,22 +143,14 @@ public class Filesystem
       return new String("");
     }
 
-  //@TODO save also needs to save the nodes for directories/files
   public String save(String p_sPath)
   {
-    System.out.print("Saving blockdevice to file "+p_sPath);
-
-    byte[][] savedDisk =new byte[250][512];
-
-    for(int i = 0; i<250; i++)
-    {
-      savedDisk[i] = m_BlockDevice.readBlock(i);
-    }
+    System.out.print("Saving filesystem to file "+p_sPath);
 
     try
     {
       ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(p_sPath));
-      out.writeObject(savedDisk);
+      out.writeObject(this);
       out.flush();
       out.close();
     }
@@ -170,34 +162,25 @@ public class Filesystem
     return new String("");
   }
 
-  //@TODO read also needs to load the file for nodes that represents directories/files
-  public String read(String p_sPath)
+  public Filesystem read(String p_sPath)
   {
-    System.out.print("Reading file "+p_sPath+" to blockdevice");
-    byte[][] disk = null;
-    ObjectInputStream in = null;
+    System.out.println("Reading file "+p_sPath + " to restore filesystem");
+    Filesystem filesystem = null;
+    ObjectInputStream in;
     try
     {
       in = new ObjectInputStream(new FileInputStream(p_sPath));
-      disk = (byte[][]) in.readObject();
+      filesystem = (Filesystem) in.readObject();
       in.close();
-    }
-
-    catch (IOException e)
+    } catch (IOException e)
     {
       e.printStackTrace();
-    }
-    catch (ClassNotFoundException e)
+    } catch (ClassNotFoundException e)
     {
       e.printStackTrace();
     }
 
-    for(int i = 0; i<250; i++)
-    {
-      m_BlockDevice.writeBlock(i,disk[i]);
-    }
-
-    return new String("");
+    return filesystem;
   }
 
   public String rm(String p_asPath)

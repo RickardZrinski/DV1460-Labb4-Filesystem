@@ -1,9 +1,10 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Rickard on 2014-12-16.
  */
-public class Node
+public class Node implements Serializable
 {
     Node parent;
     ArrayList children = new ArrayList<Node>();

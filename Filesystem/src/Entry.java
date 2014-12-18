@@ -1,8 +1,9 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Entry
+public class Entry implements Serializable
 {
     private boolean isDirectory;
     private String name;

@@ -118,7 +118,7 @@ public class Shell
                     }
                   else
                     {
-                      System.out.println(m_Filesystem.read(asCommandArray[1]));
+                      m_Filesystem = m_Filesystem.read(asCommandArray[1]);
                     }
                   break;
 
