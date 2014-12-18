@@ -230,17 +230,83 @@ public class Filesystem
     }
 
   public String append(String p_asSource,String p_asDestination)
+  {
+    System.out.print("Appending file ");
+    System.out.print(p_asSource);
+    System.out.print(" to ");
+    System.out.print(p_asDestination);
+
+
+    if(currentDirectory.getNode(p_asSource) == null)
     {
-      System.out.print("Appending file ");
-      System.out.print(p_asSource);
-      System.out.print(" to ");
-      System.out.print(p_asDestination);
-
-
-
-
-      return new String("");
+      return new String("\nsource path does not exist!");
     }
+
+    if(currentDirectory.getNode(p_asDestination) == null)
+    {
+      return new String("\nDestination path does not exist!");
+    }
+
+    if(currentDirectory.getNode(p_asSource).getData().isDirectory())
+    {
+      return new String("\nSource path is a directory !");
+    }
+
+    if(currentDirectory.getNode(p_asDestination).getData().isDirectory())
+    {
+      return new String("\nDestionation path is a directory !");
+    }
+
+    ArrayList<Integer> sourceBlockindex = currentDirectory.getNode(p_asSource).getData().getArrayIndexes();
+    ArrayList<Integer> destinationBlockIndex = currentDirectory.getNode(p_asSource).getData().getArrayIndexes();
+
+    String sourceString = "";
+    for(int i=0; i<sourceBlockindex.size(); i++)
+    {
+      byte[] fetchByteArray = m_BlockDevice.readBlock(sourceBlockindex.get(i));
+      sourceString = new String(fetchByteArray);
+    }
+
+    String destinationString = "";
+    for(int i=0; i<destinationBlockIndex.size(); i++)
+    {
+      byte[] fetchByteArray = m_BlockDevice.readBlock(destinationBlockIndex.get(i));
+      destinationString = new String(fetchByteArray);
+    }
+
+    // remove from simulated disk and from the saved index inside node.
+    for(int i = 0; i<destinationBlockIndex.size(); i++)
+    {
+      this.m_BlockDevice.freeMemBlock(destinationBlockIndex.get(i));
+      destinationBlockIndex.remove(i);
+    }
+
+    destinationString = destinationString + sourceString;
+
+    byte[] toBytes = destinationString.getBytes();
+
+    byte[] to512bytes = new byte[512];
+    for (int i = 0; i < to512bytes.length; i++)
+    {
+      to512bytes[i] = toBytes[i];
+    }
+
+    int blockIndex = m_BlockDevice.getNextAvailableIndex();
+    currentDirectory.getNode(p_asDestination).getData().insertArrayIndex(blockIndex);
+    int appendedfiles = m_BlockDevice.writeBlock(blockIndex, to512bytes);
+
+    if(appendedfiles == 1)
+    {
+      return new String("\nAppend is successfully");
+    }
+
+    else
+    {
+      return new String("Creation of file failed!");
+    }
+    
+  }
+
   
   public String rename(String p_asSource,String p_asDestination)
   {
