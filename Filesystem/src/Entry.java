@@ -7,7 +7,6 @@ public class Entry implements Serializable
 {
     private boolean isDirectory;
     private String name;
-    private int size;
     private Date creationDate;
     private byte[] data;
     private ArrayList<Integer> memBlockIndex;
@@ -48,11 +47,6 @@ public class Entry implements Serializable
         return name;
     }
 
-    public int getSize()
-    {
-        return size;
-    }
-
     public Date getCreationDate()
     {
         return creationDate;
@@ -71,11 +65,6 @@ public class Entry implements Serializable
     public void setName(String name)
     {
         this.name = name;
-    }
-
-    public void setSize(int size)
-    {
-        this.size = size;
     }
 
     public void setCreationDate(Date creationDate)
