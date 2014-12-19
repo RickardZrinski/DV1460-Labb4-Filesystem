@@ -114,13 +114,16 @@ public class Filesystem implements Serializable
     return new String("");
   }
 
-  //@TODO cat() will yield exception if you perform it on a file that doesn't exist
   public String cat(String p_asPath)
     {
       System.out.print("Dumping contents of file ");
       System.out.print("");
-      if(!currentDirectory.getNode(p_asPath).getData().isDirectory())
+      Node check = null;
+      check = currentDirectory.getNode(p_asPath);
+      if(check != null)
       {
+        if(!currentDirectory.getNode(p_asPath).getData().isDirectory())
+        {
           ArrayList<Integer> fetch = currentDirectory.getNode(p_asPath).getData().getArrayIndexes();
           for(int i=0; i<fetch.size(); i++)
           {
@@ -128,10 +131,13 @@ public class Filesystem implements Serializable
             String makeString = new String(fetchByteArray);
             System.out.println(makeString);
           }
+
+        }
+
       }
       else
       {
-        return "This is not a file!";
+        return "Error! This is not a file!";
       }
 
       return new String("");
