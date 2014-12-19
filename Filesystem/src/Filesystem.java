@@ -366,7 +366,7 @@ public class Filesystem implements Serializable
     System.out.print(p_asDestination+"\n");
     Node rename = currentDirectory.getNode(p_asSource);
 
-    if(rename.getData().isDirectory() == true)
+    if(rename.getData().isDirectory())
     {
       return new String(" This is a directory, sorry");
     }
@@ -412,7 +412,7 @@ public class Filesystem implements Serializable
   {
     Node node = currentDirectory.getNode(p_asPath);
 
-    if(node != null && node.getData().isDirectory() == true)
+    if(node != null && node.getData().isDirectory())
     {
       System.out.print("Changing directory to ");
       System.out.print("");

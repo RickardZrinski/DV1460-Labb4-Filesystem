@@ -13,7 +13,7 @@ public class Entry implements Serializable
 
     Entry(String name, boolean isDirectory)
     {
-        if(isDirectory() == false)
+        if(!isDirectory())
         {
             memBlockIndex = new ArrayList<Integer>();
         }
