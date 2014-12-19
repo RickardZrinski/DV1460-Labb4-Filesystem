@@ -255,7 +255,6 @@ public class Filesystem implements Serializable
         return new String("\nDestination file is a directory !");
       }
       //kollar om målpath existerar
-      //Node targetCheck3 = currentDirectory.getNode("");
       Node targetCheck3 = currentDirectory.getNode(targetPath);
       if(targetCheck3 == null)
       {
