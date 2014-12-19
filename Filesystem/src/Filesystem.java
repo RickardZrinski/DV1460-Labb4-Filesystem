@@ -256,22 +256,22 @@ public class Filesystem implements Serializable
     {
       byte[] sourceBytes = sourceString[i].getBytes();
       int blockIndex = m_BlockDevice.getNextAvailableIndex();
-      currentDirectory.getNode(p_asDestination).getData().insertArrayIndex(blockIndex);
+      destinationFile.getData().insertArrayIndex(blockIndex);
       int status = this.m_BlockDevice.writeBlock(blockIndex,sourceBytes);
 
       if(status == -1)
       {
-        return new String("Block out of range!");
+        return new String("\nBlock out of range!");
       }
 
       if(status == -2)
       {
-        return new String("Size is not 512!");
+        return new String("\nSize is not 512!");
       }
 
     }
 
-    return new String("Copy was successfully done !!");
+    return new String("\nCopy was successfully done !!");
   }
 
   public String append(String p_asSource,String p_asDestination)
