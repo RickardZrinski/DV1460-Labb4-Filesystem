@@ -3,9 +3,9 @@ import java.util.ArrayList;
 
 public class Node implements Serializable
 {
-    Node parent;
-    ArrayList children = new ArrayList<Node>();
-    Entry data;
+    private Node parent;
+    private ArrayList children = new ArrayList<Node>();
+    private Entry data;
 
     Node(Node parent, Entry data)
     {
