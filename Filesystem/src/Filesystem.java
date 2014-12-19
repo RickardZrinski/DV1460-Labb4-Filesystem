@@ -101,11 +101,7 @@ public class Filesystem implements Serializable
         }
         int check = m_BlockDevice.writeBlock(m_BlockDevice.getNextAvailableIndex(), to512bytes);
 
-        if(check == 1)
-        {
-
-        }
-        else
+        if(check != 1)
         {
           System.out.println("Creation of file failed!");
         }
