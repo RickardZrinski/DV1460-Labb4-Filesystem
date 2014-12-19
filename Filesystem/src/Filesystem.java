@@ -254,10 +254,10 @@ public class Filesystem implements Serializable
     // copy source data to destination
     for(int i =0; i<sourceString.length; i++)
     {
-      byte[] sourcebytes = sourceString[i].getBytes();
+      byte[] sourceBytes = sourceString[i].getBytes();
       int blockIndex = m_BlockDevice.getNextAvailableIndex();
       currentDirectory.getNode(p_asDestination).getData().insertArrayIndex(blockIndex);
-      int status = this.m_BlockDevice.writeBlock(blockIndex,sourcebytes);
+      int status = this.m_BlockDevice.writeBlock(blockIndex,sourceBytes);
 
       if(status == -1)
       {
