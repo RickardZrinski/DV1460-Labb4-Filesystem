@@ -113,32 +113,31 @@ public class Filesystem implements Serializable
 
     return new String("");
   }
-
+  
   public String cat(String p_asPath)
     {
       System.out.print("Dumping contents of file ");
       System.out.print("");
-      Node check = null;
-      check = currentDirectory.getNode(p_asPath);
-      if(check != null)
-      {
-        if(!currentDirectory.getNode(p_asPath).getData().isDirectory())
-        {
-          ArrayList<Integer> fetch = currentDirectory.getNode(p_asPath).getData().getArrayIndexes();
-          for(int i=0; i<fetch.size(); i++)
-          {
-            byte[] fetchByteArray = m_BlockDevice.readBlock(fetch.get(i));
-            String makeString = new String(fetchByteArray);
-            System.out.println(makeString);
-          }
 
-        }
-
-      }
-      else
+      if(currentDirectory.getNode(p_asPath) == null)
       {
-        return "Error! This is not a file!";
+        return new String("Path does not exist!");
       }
+
+      if(currentDirectory.getNode(p_asPath).getData().isDirectory() == true)
+      {
+        return new String("Path is a directory !");
+      }
+
+
+      ArrayList<Integer> fetch = currentDirectory.getNode(p_asPath).getData().getArrayIndexes();
+      for(int i=0; i<fetch.size(); i++)
+      {
+        byte[] fetchByteArray = m_BlockDevice.readBlock(fetch.get(i));
+        String makeString = new String(fetchByteArray);
+        System.out.println(makeString);
+      }
+
 
       return new String("");
     }
