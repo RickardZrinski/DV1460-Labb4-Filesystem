@@ -206,129 +206,72 @@ public class Filesystem implements Serializable
   public String copy(String p_asSource,String p_asDestination)
   {
     System.out.print("Copying file from ");
+    System.out.print(p_asSource);
+    System.out.print(" to ");
+    System.out.print(p_asDestination);
 
-    Node sourceDirectoryExists = null;
-    Node getSourceFile = null;
-    Node destDirectoryExists = null;
+    if(currentDirectory.getNode(p_asSource) == null)
+    {
+      return new String("\nsource path does not exist!");
+    }
 
-    String[] source = p_asSource.split("/");
-    for(int i=0; i<source.length; i++)
+    if(currentDirectory.getNode(p_asDestination) == null)
     {
-      System.out.println(source[i]);
+      return new String("\nDestination path does not exist!");
     }
-    String pathTo = "";
-    for(int i = 0;i < source.length-1;i++)
+
+    if(currentDirectory.getNode(p_asSource).getData().isDirectory())
     {
-      pathTo += source[i] + "/";
+      return new String("\nSource path is a directory !");
     }
-    //om det skickas in en källpath tillsammans med källfilen
-    if(source.length > 1)
+
+    if(currentDirectory.getNode(p_asDestination).getData().isDirectory())
     {
-      sourceDirectoryExists = currentDirectory.getNode(pathTo);
-      if(sourceDirectoryExists != null)
+      return new String("\nDestionation path is a directory !");
+    }
+
+    Node sourceFile = currentDirectory.getNode(p_asSource);
+    Node destinationFile = currentDirectory.getNode(p_asDestination);
+
+    ArrayList<Integer> sourceBlockIndex = sourceFile.getData().getArrayIndexes();
+    ArrayList<Integer> destinationBlockIndex = destinationFile.getData().getArrayIndexes();
+
+    String [] sourceString;
+    sourceString = new String [sourceBlockIndex.size()];
+    for(int i = 0; i<sourceBlockIndex.size(); i++)
+    {
+      byte[] sourceByteArray = m_BlockDevice.readBlock(sourceBlockIndex.get(i));
+      sourceString[i] = new String(sourceByteArray);
+    }
+
+    // remove data on destination file which will be replaced by source data.
+    for(int i = 0; i<destinationBlockIndex.size(); i++)
+    {
+      this.m_BlockDevice.freeMemBlock(destinationBlockIndex.get(i));
+      destinationBlockIndex.remove(i);
+    }
+
+    // copy source data to destination
+    for(int i =0; i<sourceString.length; i++)
+    {
+      byte[] sourcebytes = sourceString[i].getBytes();
+      int blockIndex = m_BlockDevice.getNextAvailableIndex();
+      currentDirectory.getNode(p_asDestination).getData().insertArrayIndex(blockIndex);
+      int status = this.m_BlockDevice.writeBlock(blockIndex,sourcebytes);
+
+      if(status == -1)
       {
-        getSourceFile = currentDirectory.getNode(source[source.length-1]);
+        return new String("Block out of range!");
       }
-    }
-    //annars om det skickas in bara en fil som källa
-    if(source.length == 1 && !currentDirectory.getNode(p_asSource).getData().isDirectory())
-    {
-      getSourceFile = currentDirectory.getNode(p_asSource);
-    }
 
-    System.out.println("To ");
-    String[] target = p_asDestination.split("/");
-    pathTo = "";
-    for(int i=0; i< target.length;i++)
-    {
-      System.out.println(target[i]);
-    }
-
-    for(int i = 0;i < target.length-1;i++)
-    {
-      pathTo += target[i] + "/";
-    }
-    //om målfilen har en path
-    if(target.length > 1 && getSourceFile != null)
-    {
-      destDirectoryExists = currentDirectory.getNode(pathTo);
-      if(destDirectoryExists != null)
+      if(status == -2)
       {
-        //lägger till gamla filen till specifierad path där den ska vara i detta fallet, och döper om den till målfilsnamn
-        Node check = currentDirectory.getNode(target[target.length - 1]);
-        //om målfil med path redan finns så tas den bort
-        if(check != null)
-        {
-          rm(target[target.length-1]);
-          check = null;
-        }
-        //om målfil inte finns
-        else if(check == null)
-        {
-          destDirectoryExists.addChild(new Node(destDirectoryExists, new Entry(target[target.length - 1], false)));
-
-          ArrayList<Integer> fetch = currentDirectory.getNode(source[source.length-1]).getData().getArrayIndexes();
-          System.out.println("fetch size is: "+fetch.size());
-          int[] savedIndexes = new int[fetch.size()];
-
-          //kopiera allokeringar från fetch till nya allokeringar i memblockDevice
-          for(int i=0; i<fetch.size();i++)
-          {
-            int freeIndex = m_BlockDevice.getNextAvailableIndex();
-            byte[] copyArray = m_BlockDevice.readBlock(fetch.get(i));
-            m_BlockDevice.writeBlock(freeIndex, copyArray);
-            savedIndexes[i] = freeIndex;
-          }
-
-          for(int i=0; i< savedIndexes.length; i++)
-          {
-            currentDirectory.getNode(target[target.length-1]).getData().insertArrayIndex(savedIndexes[i]);
-          }
-        }
+        return new String("Size is not 512!");
       }
+
     }
-    //om målfilen inte har en path
-    else if(target.length == 1 && getSourceFile != null)
-    {
-      Node check = currentDirectory.getNode(p_asDestination);
 
-      //om målfil existerar, så tas den bort först
-      if(check != null)
-      {
-        rm(p_asDestination);
-        check = null;
-      }
-      //om målfil ej existerar
-      if(check == null)
-      {
-        //lägger till gamla filen till root där den ska vara i detta fallet, och döper om den till målfilsnamn
-        System.out.println("name of target.length-1 is: "+target[target.length-1]);
-        currentDirectory.addChild(new Node(currentDirectory,new Entry(target[target.length-1],false)));
-
-        ArrayList<Integer> fetch = currentDirectory.getNode(source[source.length-1]).getData().getArrayIndexes();
-        int[] savedIndexes = new int[fetch.size()];
-
-        //kopiera allokeringar från fetch till nya allokeringar i memblockDevice
-        for(int i=0; i<fetch.size();i++)
-        {
-          int freeIndex = m_BlockDevice.getNextAvailableIndex();
-          byte[] copyArray = m_BlockDevice.readBlock(fetch.get(i));
-
-          m_BlockDevice.writeBlock(freeIndex, copyArray);
-          savedIndexes[i] = freeIndex;
-        }
-
-        for(int i=0; i< savedIndexes.length; i++)
-        {
-          currentDirectory.getNode(target[target.length-1]).getData().insertArrayIndex(savedIndexes[i]);
-        }
-      }
-    }
-    else if(getSourceFile == null)
-    {
-      System.out.println("Error! target directory or source target file doesn't exist!");
-    }
-    return new String("");
+    return new String("Copy was successfully done !!");
   }
 
   public String append(String p_asSource,String p_asDestination)
