@@ -60,8 +60,7 @@ public class Filesystem implements Serializable
 
       return new String("");
     }
-
-  //@TODO needs to include the byteSize to the Entry object for a newly created node
+  
   public String create(String p_asPath,byte[] p_abContents)
   {
     System.out.print("Creating file ");
@@ -113,7 +112,7 @@ public class Filesystem implements Serializable
 
     return new String("");
   }
-  
+
   public String cat(String p_asPath)
     {
       System.out.print("Dumping contents of file ");
