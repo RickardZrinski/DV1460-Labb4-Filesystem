@@ -40,31 +40,34 @@ public class Filesystem implements Serializable
   }
 
   public String ls(String p_asPath)
+  {
+    String output;
+
+    Node node = currentDirectory.getNode(p_asPath);
+
+    if(node != null)
     {
-      Node node = currentDirectory.getNode(p_asPath);
+      output = "Listing directories and files\n";
 
-      if(node != null)
+      ArrayList<Node> children = node.getChildren();
+
+      for(Node child : children)
       {
-        System.out.print("listing directories and files\n");
-
-        ArrayList<Node> children = node.getChildren();
-
-        for(Node child : children)
-        {
-          System.out.print(child.getData().getName() + " ");
-        }
-      } else
-      {
-        System.out.println("Invalid path.");
+        output += child.getData().getName() + " ";
       }
-
-      return new String("");
+    } else
+    {
+      output = "Invalid path.";
     }
+
+    return output;
+  }
   
   public String create(String p_asPath,byte[] p_abContents)
   {
-    System.out.print("Creating file ");
-    System.out.print("");
+    String output;
+
+    output = "Creating file ";
 
     String[] pathArray = p_asPath.split("/");
     String pathTo = "";
@@ -87,7 +90,7 @@ public class Filesystem implements Serializable
         Node newNode = new Node(currentDirectory, new Entry(pathArray[pathArray.length-1], false));
         parentNode.addChild(newNode);
 
-        System.out.println(" Writes to block number: " + m_BlockDevice.getNextAvailableIndex());
+        System.out.println("Writes to block number: " + m_BlockDevice.getNextAvailableIndex());
         newNode.getData().insertArrayIndex(m_BlockDevice.getNextAvailableIndex());
         String fetch = new String(p_abContents);
 
@@ -102,48 +105,50 @@ public class Filesystem implements Serializable
 
         if(check != 1)
         {
-          System.out.println("Creation of file failed!");
+          output = "Creation of file failed!";
         }
 
     } else
     {
-      System.out.println("Invalid path.");
+      output = "Invalid path.";
     }
 
-    return new String("");
+    return output;
   }
 
   public String cat(String p_asPath)
+  {
+    String output;
+    output = "Dumping contents of file ";
+
+    if(currentDirectory.getNode(p_asPath) == null)
     {
-      System.out.print("Dumping contents of file ");
-      System.out.print("");
-
-      if(currentDirectory.getNode(p_asPath) == null)
-      {
-        return new String("Path does not exist!");
-      }
-
-      if(currentDirectory.getNode(p_asPath).getData().isDirectory() == true)
-      {
-        return new String("Path is a directory !");
-      }
-
-
-      ArrayList<Integer> fetch = currentDirectory.getNode(p_asPath).getData().getArrayIndexes();
-      for(int i=0; i<fetch.size(); i++)
-      {
-        byte[] fetchByteArray = m_BlockDevice.readBlock(fetch.get(i));
-        String makeString = new String(fetchByteArray);
-        System.out.println(makeString);
-      }
-
-
-      return new String("");
+      output = "Path does not exist!";
+      return output;
     }
+
+    if(currentDirectory.getNode(p_asPath).getData().isDirectory() == true)
+    {
+      output = "Path is a directory!";
+      return output;
+    }
+
+    ArrayList<Integer> fetch = currentDirectory.getNode(p_asPath).getData().getArrayIndexes();
+    for(int i=0; i<fetch.size(); i++)
+    {
+      byte[] fetchByteArray = m_BlockDevice.readBlock(fetch.get(i));
+      String makeString = new String(fetchByteArray);
+      output += makeString + "\n";
+    }
+
+
+    return output;
+  }
 
   public String save(String p_sPath)
   {
-    System.out.print("Saving filesystem to file "+p_sPath);
+    String output;
+    output = "Saving filesystem to file " + p_sPath;
 
     try
     {
@@ -157,7 +162,7 @@ public class Filesystem implements Serializable
       e.getStackTrace();
     }
 
-    return new String("");
+    return output;
   }
 
   public Filesystem read(String p_sPath)
@@ -183,7 +188,8 @@ public class Filesystem implements Serializable
 
   public String rm(String p_asPath)
   {
-    System.out.print("Removing file ");
+    String output;
+    output = "Removing file ";
 
     // Get node to remove
     if(!currentDirectory.getNode(p_asPath).getData().isDirectory())
@@ -200,15 +206,13 @@ public class Filesystem implements Serializable
       // Remove the node
       this.currentDirectory.remove(p_asPath);
     }
-    return new String("");
+    return output;
   }
 
   public String copy(String p_asSource,String p_asDestination)
   {
-    System.out.print("Copying file from ");
-    System.out.print(p_asSource);
-    System.out.print(" to ");
-    System.out.print(p_asDestination);
+    String output;
+    output = "Copying file from " + p_asSource + " to " + p_asDestination;
 
     String[] sourceSplit = p_asSource.split("/");
     String sourcePath = "";
@@ -221,19 +225,21 @@ public class Filesystem implements Serializable
     {
       if(currentDirectory.getNode(p_asSource) == null)
       {
-        return new String("\nsource path does not exist!");
+        output += "\nSource path does not exist!";
+        return output;
       }
 
       if(currentDirectory.getNode(sourcePath).getData().isDirectory())
       {
-        return new String("\nSource path is a directory !");
+        output += "\nSource path is a directory!";
+        return output;
       }
     }
     else if(sourceSplit.length == 1)
     {
       if(currentDirectory.getNode(p_asSource).getData().isDirectory())
       {
-        return new String("\nSource path is a directory !");
+        output += "\nSource path is a directory!";
       }
     }
 
@@ -252,13 +258,15 @@ public class Filesystem implements Serializable
       Node targetCheck2 = currentDirectory.getNode(targetsplit[targetsplit.length-1]);
       if(targetCheck2 != null && targetCheck.getData().isDirectory())
       {
-        return new String("\nDestination file is a directory !");
+        output += "Destination file is a directory!";
+        return output;
       }
       //kollar om målpath existerar
       Node targetCheck3 = currentDirectory.getNode(targetPath);
       if(targetCheck3 == null)
       {
-        return new String("\nDestination path does not exist!");
+        output += "\nDestination path does not exist!";
+        return output;
       }
     }
     //om målfilen ska skapas i root
@@ -266,7 +274,8 @@ public class Filesystem implements Serializable
     {
       if(currentDirectory.getNode(p_asDestination).getData().isDirectory())
       {
-        return new String("\nDestination file is a directory!");
+        output += "\nDestination file is a directory!";
+        return output;
       }
     }
 
@@ -315,8 +324,6 @@ public class Filesystem implements Serializable
       }
     }
 
-    System.out.println("målfilens namn är: "+targetsplit[targetsplit.length-1]);
-
     // remove data if destination file contains allocated blocks
     for(int i = 0; i<destinationBlockIndex.size(); i++)
     {
@@ -332,43 +339,48 @@ public class Filesystem implements Serializable
       destinationFile.getData().insertArrayIndex(availableIndex);
       if(status == -1)
       {
-        return new String("\nBlock out of range!");
+        output += "\nBlock out of range!";
+        return output;
       }
 
       if(status == -2)
       {
-        return new String("\nSize is not 512!");
+        output += "\nSize is not 512!";
+        return output;
       }
     }
-    return new String("\nCopy was successfully done !!");
+    output += "\nCopy was successfully done!";
+    return output;
   }
 
   public String append(String p_asSource,String p_asDestination)
   {
-    System.out.print("Appending file ");
-    System.out.print(p_asSource);
-    System.out.print(" to ");
-    System.out.print(p_asDestination);
+    String output;
+    output = "Appending file " + p_asSource + " to " + p_asDestination;
 
 
     if(currentDirectory.getNode(p_asSource) == null)
     {
-      return new String("\nsource path does not exist!");
+      output += "\nSource path does not exist!";
+      return output;
     }
 
     if(currentDirectory.getNode(p_asDestination) == null)
     {
-      return new String("\nDestination path does not exist!");
+      output += "\nDestination path does not exist!";
+      return output;
     }
 
     if(currentDirectory.getNode(p_asSource).getData().isDirectory())
     {
-      return new String("\nSource path is a directory !");
+      output += "\nSource path is a directory!";
+      return output;
     }
 
     if(currentDirectory.getNode(p_asDestination).getData().isDirectory())
     {
-      return new String("\nDestionation path is a directory !");
+      output += "\nDestionation path is a directory !";
+      return output;
     }
 
     ArrayList<Integer> sourceBlockIndex = currentDirectory.getNode(p_asSource).getData().getArrayIndexes();
@@ -406,8 +418,6 @@ public class Filesystem implements Serializable
 
     byte result[] = outputStream.toByteArray();
 
-    System.out.println("\nsize is: "+result.length);
-
     //////////////////////////////////////////
 
     int blockIndex = m_BlockDevice.getNextAvailableIndex();
@@ -416,99 +426,96 @@ public class Filesystem implements Serializable
 
     if(appendedfiles == 1)
     {
-      return new String("\nAppend is successfully");
+      output += "\nAppend was successful";
+      return output;
     }
 
     else
     {
-      return new String("Creation of file failed!");
+      output += "Creation of file failed!";
+      return output;
     }
 
   }
 
-  
   public String rename(String p_asSource,String p_asDestination)
   {
-    System.out.print("Renaming file ");
-    System.out.println(p_asSource);
-    System.out.print(" to ");
-    System.out.print(p_asDestination+"\n");
+    String output;
+    output = "Renaming file " + p_asSource + " to " + p_asDestination + "\n";
     Node rename = currentDirectory.getNode(p_asSource);
 
     if(rename.getData().isDirectory())
     {
-      return new String(" This is a directory, sorry");
+      output += "This is a directory, sorry";
+    } else
+    {
+      output += "Name changed to: " + p_asDestination;
     }
 
     rename.getData().setName(p_asDestination);
-    return new String("Name changed to: " + p_asDestination);
+
+    return output;
   }
 
 
   public String mkdir(String p_asPath)
+  {
+    String output;
+
+    String[] pathArray = p_asPath.split("/");
+    String pathTo = "";
+    for(int i = 0;i < pathArray.length-1;i++)
     {
-      String[] pathArray = p_asPath.split("/");
-      String pathTo = "";
-      for(int i = 0;i < pathArray.length-1;i++)
-      {
-        pathTo += pathArray[i] + "/";
-      }
-
-      Node parentNode;
-      if(pathArray.length > 1)
-      {
-        parentNode = currentDirectory.getNode(pathTo);
-      } else
-      {
-        parentNode = currentDirectory;
-      }
-
-      if (parentNode != null)
-      {
-        System.out.print("Creating directory ");
-
-        Node newNode = new Node(parentNode, new Entry(pathArray[pathArray.length - 1], true));
-        parentNode.addChild(newNode);
-
-        return newNode.getData().getName();
-      } else
-      {
-        return "Invalid path.";
-      }
+      pathTo += pathArray[i] + "/";
     }
+
+    Node parentNode;
+    if(pathArray.length > 1)
+    {
+      parentNode = currentDirectory.getNode(pathTo);
+    } else
+    {
+      parentNode = currentDirectory;
+    }
+
+    if (parentNode != null)
+    {
+      output = "Creating directory ";
+
+      Node newNode = new Node(parentNode, new Entry(pathArray[pathArray.length - 1], true));
+      parentNode.addChild(newNode);
+
+      output += newNode.getData().getName();
+    } else
+    {
+      output = "Invalid path.";
+    }
+
+    return output;
+  }
 
   public String cd(String p_asPath)
   {
+    String output;
+
     Node node = currentDirectory.getNode(p_asPath);
 
     if(node != null && node.getData().isDirectory())
     {
-      System.out.print("Changing directory to ");
-      System.out.print("");
-      System.out.println(p_asPath);
+      output = "Changing directory to " + p_asPath;
 
       currentDirectory = node;
     }
     else
     {
-      System.out.println("Invalid path.");
+      output = "Invalid path.";
     }
 
-    return new String("");
+    return output;
   }
 
   public String pwd()
-    {
-      return currentDirectory.getPath();
-    }
-
-
-//  private void dumpArray(String p_asArray)
-//    {
-//      for(int nIndex=0;nIndex<p_asArray.length;nIndex++)
-//        {
-//          System.out.print(p_asArray[nIndex]+"=>");
-//        }
-//    }
-
+  {
+    return currentDirectory.getPath();
+  }
 }
