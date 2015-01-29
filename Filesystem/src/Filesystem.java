@@ -29,12 +29,7 @@ public class Filesystem implements Serializable
 
     for(int i = 0; i<250; i++)
     {
-       int formatResponse = m_BlockDevice.writeBlock(i,format);
-       if(formatResponse == -1)
-       {
-         return new String("Diskformat failed");
-       }
-
+       m_BlockDevice.freeMemBlock(i);
     }
     return new String("Diskformat successful");
   }
